@@ -39,10 +39,15 @@ npm run build
 
 The built `dist/` folder can be deployed as a static site to Vercel, Netlify, GitHub Pages, Nginx, or any static host.
 
-## Portfolio Demo
+## Deployed Demo
+
+[SignalTower AI on Vercel](https://signaltower-f67n7m6ri-samiovirus-projects.vercel.app)
+
+## Portfolio Package
 
 - [Case Study](docs/case-study.md)
-- [Demo Script](docs/demo-script.md)
+- [Demo Script](docs/demo-script.md) - polished external presentation script
+- [Walkthrough](docs/walkthrough.md) - concise internal run-of-show and speaker notes
 
 ## Demo Data Disclaimer
 

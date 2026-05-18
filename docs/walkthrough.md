@@ -1,5 +1,7 @@
 # SignalTower AI Walkthrough
 
+Purpose: concise internal run-of-show and speaker notes.
+
 ## 30-second version
 
 SignalTower AI is a control tower for enterprise AI commercialization. It shows which AI use cases are ready for production, which are stuck, why they are stuck, and what leadership decision would unlock the most value fastest. The thesis is simple: regulated enterprises do not lack AI ideas; they lack a disciplined operating layer that converts AI demand into governed production value.

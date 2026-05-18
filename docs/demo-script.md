@@ -1,5 +1,7 @@
 # SignalTower AI Demo Script
 
+Purpose: polished external presentation script.
+
 ## 30-Second Version
 
 SignalTower AI is a synthetic AI commercialization control tower for regulated enterprises. The premise is that most organizations do not lack AI ideas; they struggle to move the right ideas from pilots into governed production. This demo shows how leaders can see which AI initiatives are ready, which are stuck, why they are stuck, and which decision could unlock the most value fastest.
