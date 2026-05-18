@@ -39,6 +39,11 @@ npm run build
 
 The built `dist/` folder can be deployed as a static site to Vercel, Netlify, GitHub Pages, Nginx, or any static host.
 
+## Portfolio Demo
+
+- [Case Study](docs/case-study.md)
+- [Demo Script](docs/demo-script.md)
+
 ## Demo Data Disclaimer
 
 This prototype uses synthetic data only. It does not contain internal data from any company or financial institution. It is designed to demonstrate an outside-in operating model concept for governed AI commercialization in regulated enterprises.
