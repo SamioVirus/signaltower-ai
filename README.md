@@ -48,6 +48,7 @@ The built `dist/` folder can be deployed as a static site to Vercel, Netlify, Gi
 - [Case Study](docs/case-study.md)
 - [Demo Script](docs/demo-script.md) - polished external presentation script
 - [Walkthrough](docs/walkthrough.md) - concise internal run-of-show and speaker notes
+- [LinkedIn Post Guidance](docs/linkedin-post-guidance.md) - positioning, structure, confidentiality guardrails, and next-post briefs
 
 ## Demo Data Disclaimer
 
