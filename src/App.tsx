@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect } from "react";
+import { lazy, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import { AppShell } from "@/components/AppShell";
@@ -58,37 +58,28 @@ const ScrollToTop = () => {
   return null;
 };
 
-/**
- * Route fallback.
- *
- * Deliberately quiet: chunks load in well under a second on any realistic
- * connection, and a full skeleton that flashes for 200ms reads worse than a
- * brief status line.
- */
-const RouteFallback = () => (
-  <p role="status" aria-live="polite" className="p-6 text-sm text-muted">
-    Loading…
-  </p>
-);
-
 export const App = () => (
   <>
     <ScrollToTop />
-    <Suspense fallback={<RouteFallback />}>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route element={<AppShell />}>
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/readiness" element={<ReadinessPage />} />
-          <Route path="/initiatives/:id" element={<InitiativePage />} />
-          <Route path="/bottlenecks" element={<BottlenecksPage />} />
-          <Route path="/decisions" element={<DecisionsPage />} />
-          <Route path="/simulator" element={<SimulatorPage />} />
-          <Route path="/operating-model" element={<OperatingModelPage />} />
-          <Route path="/methodology" element={<MethodologyPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </Suspense>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      {/*
+        The shell is eager and owns its own Suspense boundary around the
+        Outlet, so navigation swaps the content area while the sidebar, header
+        and theme control stay put. A boundary out here would tear the whole
+        interface down every time a route chunk loads.
+      */}
+      <Route element={<AppShell />}>
+        <Route path="/portfolio" element={<PortfolioPage />} />
+        <Route path="/readiness" element={<ReadinessPage />} />
+        <Route path="/initiatives/:id" element={<InitiativePage />} />
+        <Route path="/bottlenecks" element={<BottlenecksPage />} />
+        <Route path="/decisions" element={<DecisionsPage />} />
+        <Route path="/simulator" element={<SimulatorPage />} />
+        <Route path="/operating-model" element={<OperatingModelPage />} />
+        <Route path="/methodology" element={<MethodologyPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   </>
 );

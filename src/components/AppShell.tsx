@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Command, Menu, Monitor, Moon, Sun, X } from "lucide-react";
 
@@ -184,7 +184,25 @@ export const AppShell = () => {
           id="main"
           className="mx-auto max-w-content px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
         >
-          <Outlet />
+          {/*
+            Routes are code-split, so the content area suspends on navigation
+            while the shell around it stays mounted. The fallback is
+            deliberately quiet: chunks resolve in well under a second, and a
+            skeleton that flashes briefly reads worse than a status line.
+          */}
+          <Suspense
+            fallback={
+              <p
+                role="status"
+                aria-live="polite"
+                className="py-8 text-sm text-muted"
+              >
+                Loading…
+              </p>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
 
         <footer className="mx-auto max-w-content px-4 pb-10 pt-4 sm:px-6 lg:px-8">
