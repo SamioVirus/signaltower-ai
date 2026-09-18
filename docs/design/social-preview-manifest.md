@@ -2,7 +2,7 @@
 
 ## Selected Asset
 
-- File: `public/signaltower-social-preview.png`
+- File: `public/og-card-v2.png`
 - Dimensions: 1280 × 640 pixels
 - Format: optimized PNG
 - Intended uses: GitHub repository Social Preview, website Open Graph image, LinkedIn link preview, and other professional sharing surfaces
