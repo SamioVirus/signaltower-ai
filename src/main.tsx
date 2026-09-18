@@ -9,11 +9,21 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import { App } from "@/App";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { initTheme } from "@/hooks/useTheme";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+// Applied before the first paint so the page never flashes the wrong theme.
+initTheme();
+
+const root = document.getElementById("root");
+if (!root) throw new Error("Root element #root was not found in index.html");
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>,
 );

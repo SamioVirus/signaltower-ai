@@ -1,20 +1,38 @@
-export const formatCurrency = (value: number): string =>
+const currency = (notation: "standard" | "compact") =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
+    notation,
+    maximumFractionDigits: notation === "compact" ? 1 : 0,
+  });
+
+export const formatCurrency = (value: number): string =>
+  currency("standard").format(value);
 
 export const formatCompactCurrency = (value: number): string =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
+  currency("compact").format(value);
 
-export const formatPercent = (value: number): string =>
-  `${Math.round(value)}%`;
+export const formatPercent = (value: number, fractionDigits = 0): string =>
+  `${value.toFixed(fractionDigits)}%`;
 
-export const formatDays = (value: number): string =>
-  `${Math.round(value)} days`;
+export const formatDays = (value: number): string => {
+  const rounded = Math.round(value);
+  return `${rounded} ${rounded === 1 ? "day" : "days"}`;
+};
+
+export const formatWeeks = (value: number): string => {
+  const rounded = Math.round(value * 10) / 10;
+  return `${rounded} ${rounded === 1 ? "week" : "weeks"}`;
+};
+
+export const formatCount = (
+  value: number,
+  singular: string,
+  plural = `${singular}s`,
+): string => `${value} ${value === 1 ? singular : plural}`;
+
+/** Points of readiness score, signed, for the score explainer. */
+export const formatPoints = (value: number): string => {
+  const rounded = Math.round(value * 10) / 10;
+  return `${rounded > 0 ? "-" : ""}${Math.abs(rounded).toFixed(1)} pts`;
+};

@@ -12,7 +12,9 @@ SignalTower AI is a portfolio layer for AI commercialization in regulated enterp
 
 The app shows an executive view of the AI portfolio, readiness scores, evidence requirements, repeated bottlenecks, and ranked leadership decisions. It is not trying to bypass governance. It shows how governance can become more visible, reusable, and accountable so leaders can convert AI demand into production value with appropriate control.
 
-This is a generic outside-in prototype using synthetic data only. It does not use real company data, internal claims, or SMBC branding.
+This is a generic outside-in prototype using synthetic data only. It contains no real institution, system, person or metric, and no company branding.
+
+Worth adding if the audience is technical: none of the figures are entered. The data file records control evidence only; a tested engine derives readiness, blockers, gate verdicts, the ranked decisions and the forecast. That is what makes the what-if simulator possible.
 
 ## 2-Minute Version
 
@@ -20,9 +22,9 @@ SignalTower AI demonstrates an AI commercialization control tower for regulated 
 
 Start with the portfolio view. It shows active AI initiatives, their stage, value at stake, readiness, risk, and blockers. The goal is to give executives a clear view of where the AI portfolio stands.
 
-Then move to the Readiness Board. Readiness is treated as an operating question, not only a model question. The app scores dimensions such as sponsor clarity, KPI baseline, data readiness, lineage, privacy, model risk, human review, monitoring, and value tracking.
+Then move to Readiness. Readiness is treated as an operating question, not only a model question. The control matrix scores twelve controls per initiative — sponsor clarity, KPI baseline, data readiness, lineage, security, privacy, model risk, human oversight, monitoring, value tracking, and where applicable vendor risk and autonomy limits — weighted by risk tier. The vertical stripes in that matrix are the gaps several teams are each solving separately.
 
-Next, open the Evidence Passport. This shows the evidence required to move a use case toward production and makes missing ownership or control evidence visible before launch.
+Next, open an Evidence Passport. Every initiative has one. It shows the evidence required to reach production, makes missing ownership visible before launch, and — in the score breakdown — shows exactly which control is costing how many points. It also surfaces control debt: evidence a stage required on the way in that was never approved.
 
 Then show Bottlenecks and Executive Decisions. The point is to distinguish repeated operating-model constraints from one-off project issues and identify the leadership decision most likely to unlock value quickly.
 

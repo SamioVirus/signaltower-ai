@@ -1,58 +1,216 @@
-import { ArrowUpRight, CalendarClock } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Layers, Target } from "lucide-react";
 
-import { PageShell } from "@/components/PageShell";
-import { useCases } from "@/data/useCases";
-import { formatCompactCurrency } from "@/lib/format";
-import { getExecutiveDecisions } from "@/lib/metrics";
+import { Page, PageHeader } from "@/components/ui/PageHeader";
+import { Badge, Card, CardBody, CardHeader } from "@/components/ui/Primitives";
+import { portfolio } from "@/data/portfolio";
+import { rankDecisions } from "@/engine/decisions";
+import type { Decision } from "@/engine/decisions";
+import {
+  formatCompactCurrency,
+  formatCount,
+  formatDays,
+  formatWeeks,
+} from "@/lib/format";
 
 export const DecisionsPage = () => {
-  const decisions = getExecutiveDecisions(useCases);
+  const decisions = rankDecisions(portfolio);
+  const systemicCount = decisions.filter(
+    (decision) => decision.kind === "systemic",
+  ).length;
 
   return (
-    <PageShell
-      eyebrow="Executive Decision View"
-      title="What should leadership unblock this week?"
-      description="A concise decision surface for the weekly AI commercialization operating review."
-    >
+    <Page>
+      <PageHeader
+        eyebrow="Executive decisions"
+        title="What should leadership unblock first?"
+        lede="One ranked queue, derived from the same control evidence as everything else. Each card shows the maths that put it in that position, because a decision list nobody can interrogate does not get used twice."
+      />
+
+      <Card>
+        <CardHeader title="How the ranking works" />
+        <CardBody>
+          <p className="max-w-4xl text-sm leading-6 text-secondary">
+            Each decision scores as{" "}
+            <span className="rounded bg-surface-sunken px-1.5 py-0.5 font-mono text-xs text-primary">
+              value in $m × confidence × urgency × leverage ÷ effort in weeks
+            </span>
+            . Confidence comes from the initiative&rsquo;s readiness, urgency
+            from how long it has been ageing, and leverage from how many
+            initiatives a single piece of work would unblock.{" "}
+            {systemicCount > 0
+              ? `${formatCount(systemicCount, "decision")} in this queue ${systemicCount === 1 ? "is" : "are"} systemic: one remediation that clears the same control for several initiatives at once.`
+              : "No systemic remediation currently qualifies."}
+          </p>
+        </CardBody>
+      </Card>
+
       <section className="grid gap-4">
         {decisions.map((decision, index) => (
-          <article key={decision.title} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:shadow-executive">
-            <div className="grid gap-5 xl:grid-cols-[70px_1fr_260px]">
-              <div className="grid h-14 w-14 place-items-center rounded-md bg-indigoTailored-50 text-xl font-semibold text-indigoTailored-700">
-                {index + 1}
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-slate-950">{decision.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{decision.whyItMatters}</p>
-                <div className="mt-4 grid gap-3 md:grid-cols-2">
-                  <DecisionField label="Risk note" value={decision.riskNote} />
-                  <DecisionField label="Required decision" value={decision.requiredDecision} />
-                  <DecisionField label="Owner" value={decision.owner} />
-                  <DecisionField label="Expected impact" value={decision.expectedImpact} />
-                </div>
-              </div>
-              <div className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Value at stake</div>
-                <div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{formatCompactCurrency(decision.valueAtStake)}</div>
-                <div className="mt-5 flex items-center gap-2 text-sm font-medium text-indigoTailored-700">
-                  <CalendarClock className="h-4 w-4" />
-                  {decision.deadline}
-                </div>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  Decision ready <ArrowUpRight className="h-3.5 w-3.5" />
-                </div>
-              </div>
-            </div>
-          </article>
+          <DecisionCard
+            key={decision.id}
+            decision={decision}
+            rank={index + 1}
+          />
         ))}
       </section>
-    </PageShell>
+    </Page>
   );
 };
 
-const DecisionField = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
-    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</div>
-    <div className="mt-1 text-sm text-slate-800">{value}</div>
+const DecisionCard = ({
+  decision,
+  rank,
+}: {
+  decision: Decision;
+  rank: number;
+}) => {
+  const isSystemic = decision.kind === "systemic";
+
+  return (
+    <Card as="article">
+      <CardBody className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-accent-soft text-xs font-bold text-accent-text">
+              {rank}
+            </span>
+            <Badge
+              className={
+                isSystemic
+                  ? "bg-warn-soft text-warn-text ring-1 ring-warn/25"
+                  : "bg-neutral-soft text-neutral-text ring-1 ring-subtle"
+              }
+            >
+              {isSystemic ? (
+                <Layers className="h-3 w-3" aria-hidden="true" />
+              ) : (
+                <Target className="h-3 w-3" aria-hidden="true" />
+              )}
+              {isSystemic ? "Systemic" : "Single initiative"}
+            </Badge>
+            <span className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              {decision.horizon}
+            </span>
+          </div>
+
+          <h2 className="mt-3 text-base font-semibold leading-6 tracking-tight text-primary">
+            {decision.title}
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-secondary">
+            {decision.rationale}
+          </p>
+
+          <div className="mt-4 rounded-lg border border-subtle bg-surface-sunken p-3">
+            <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              Decision required
+            </p>
+            <p className="mt-1 text-sm leading-6 text-primary">
+              {decision.requiredDecision}
+            </p>
+            <p className="mt-2 text-xs text-muted">Owner: {decision.owner}</p>
+          </div>
+
+          {isSystemic ? (
+            <p className="mt-3 rounded-lg border border-ok/25 bg-ok-soft p-3 text-xs leading-5 text-ok-text">
+              <span className="font-semibold">Leverage:</span>{" "}
+              {decision.effortDays} days once, against roughly{" "}
+              {decision.explanation.effortIfDoneSeparatelyDays} days if each
+              team solves it separately — a saving of{" "}
+              {decision.explanation.effortIfDoneSeparatelyDays -
+                decision.effortDays}{" "}
+              days of control capacity.
+            </p>
+          ) : null}
+
+          <div className="mt-4">
+            <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              Initiatives affected
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {decision.initiativeIds.map((id) => {
+                const initiative = portfolio.find(
+                  (candidate) => candidate.id === id,
+                );
+                return (
+                  <li key={id}>
+                    <Link
+                      to={`/initiatives/${id}`}
+                      className="inline-block rounded-md bg-surface-sunken px-2 py-1 text-xs text-secondary ring-1 ring-subtle transition hover:text-accent hover:ring-accent-border"
+                    >
+                      {initiative?.name ?? id}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-subtle bg-surface-sunken p-4">
+          <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
+            Value unlocked
+          </p>
+          <p
+            data-metric
+            className="mt-1 text-3xl font-semibold tracking-tight text-primary"
+          >
+            {formatCompactCurrency(decision.valueUnlockedUsd)}
+          </p>
+
+          <dl className="mt-4 space-y-2 border-t border-subtle pt-4 text-sm">
+            <Factor label="Effort" value={formatDays(decision.effortDays)} />
+            <Factor
+              label="Confidence"
+              value={`${Math.round(decision.explanation.confidence * 100)}%`}
+              hint="from readiness"
+            />
+            <Factor
+              label="Urgency"
+              value={`×${decision.explanation.urgency.toFixed(2)}`}
+              hint="from ageing"
+            />
+            <Factor
+              label="Leverage"
+              value={`×${decision.explanation.leverage.toFixed(2)}`}
+              hint="from reuse"
+            />
+            <Factor
+              label="Duration"
+              value={formatWeeks(decision.explanation.effortWeeks)}
+            />
+          </dl>
+
+          <div className="mt-4 flex items-baseline justify-between border-t border-subtle pt-3">
+            <span className="text-2xs font-semibold uppercase tracking-wider text-muted">
+              Priority score
+            </span>
+            <span data-metric className="text-lg font-semibold text-accent">
+              {decision.score.toFixed(2)}
+            </span>
+          </div>
+        </div>
+      </CardBody>
+    </Card>
+  );
+};
+
+const Factor = ({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+}) => (
+  <div className="flex items-baseline justify-between gap-3">
+    <dt className="text-muted">
+      {label}
+      {hint ? <span className="ml-1 text-2xs text-muted">({hint})</span> : null}
+    </dt>
+    <dd data-metric className="font-semibold text-primary">
+      {value}
+    </dd>
   </div>
 );

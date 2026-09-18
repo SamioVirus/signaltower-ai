@@ -33,8 +33,33 @@ SignalTower AI helps leaders see which AI initiatives are ready, which are stuck
 
 That visibility changes the management conversation. Instead of treating every delayed AI use case as a separate escalation, leaders can see the shared constraints across the portfolio and decide where to add ownership, evidence, standards, or governance capacity.
 
+## How It Is Built
+
+The concept above would be easy to fake: a file of use cases each carrying a readiness score and a
+blocker label, rendered into charts. SignalTower deliberately does not do that.
+
+The data file records **control evidence only** — the state of each control artifact, who owns it,
+how long it has sat there. Readiness scores, stage-gate verdicts, blockers, control debt, portfolio
+patterns, the ranked decision queue and the conversion forecast are all derived by a pure, tested
+engine from that evidence, under a scoring policy that is itself executable data.
+
+Three consequences matter for the argument this case study makes:
+
+- **The numbers can be challenged.** Each readiness score comes with a per-control breakdown showing
+  what each control contributed and what it is costing. Governance metrics that cannot be
+  interrogated do not survive contact with the people they govern.
+- **Decisions can be modelled before they are made.** The simulator applies candidate remediations
+  and re-derives the entire portfolio through the same engine, so "what would that buy us?" is
+  answered by the system rather than a side spreadsheet.
+- **The findings are not authored.** Control debt and systemic blockers emerged from the derivation.
+  Nobody wrote them into the data, which is precisely why they are worth surfacing to leadership.
+
+See [architecture.md](architecture.md) for the engineering detail and
+[decisions/0001-evidence-first-data-model.md](decisions/0001-evidence-first-data-model.md) for why
+the model was inverted.
+
 ## Synthetic-Data Boundary
 
 This is a generic outside-in prototype using synthetic data only.
 
-It does not use real company data, does not contain internal claims, and is not branded as or presented as an SMBC tool. It is a portfolio demonstration of an operating-model concept for regulated enterprise AI commercialization.
+It does not use real company data, does not contain internal claims, and is not branded as or presented as any institution's tool. It is a portfolio demonstration of an operating-model concept for regulated enterprise AI commercialization.

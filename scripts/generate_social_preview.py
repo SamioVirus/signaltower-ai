@@ -69,24 +69,25 @@ def preview_one() -> Image.Image:
     mark(draw, 72, 58)
     draw.text((146, 66), "SignalTower AI", font=font(28, True), fill=WHITE)
     eyebrow(draw, 72, 164)
-    draw.text((72, 224), "Enterprise AI", font=font(57, True), fill=WHITE)
-    draw.text((72, 292), "Delivery Control Tower", font=font(57, True), fill=WHITE)
-    draw.text((74, 382), "Turn AI demand into governed production value.", font=font(25), fill=SLATE)
-    draw.text((74, 425), "Portfolio readiness  •  Evidence tracking  •  Executive decisions", font=font(19), fill=INDIGO_LIGHT)
+    draw.text((72, 214), "Enterprise AI does not", font=font(50, True), fill=WHITE)
+    draw.text((72, 272), "stall on the model.", font=font(50, True), fill=WHITE)
+    draw.text((72, 330), "It stalls on the evidence.", font=font(50, True), fill=INDIGO_LIGHT)
+    draw.text((74, 410), "A control tower built on a tested decision engine.", font=font(23), fill=SLATE)
+    draw.text((74, 450), "Derived readiness  •  Systemic blockers  •  What-if scenarios", font=font(18), fill=INDIGO_LIGHT)
 
     rounded(draw, (760, 72, 1208, 548), 22, PANEL, outline="#33405A", width=2)
-    draw.text((796, 105), "Executive Portfolio", font=font(24, True), fill=WHITE)
-    draw.text((796, 142), "Governed pilot-to-production visibility", font=font(16), fill=SLATE)
-    for i, (label, color) in enumerate([
-        ("Portfolio intake", INDIGO),
-        ("Readiness evidence", CYAN),
-        ("Decision support", GREEN),
+    draw.text((796, 105), "Evidence in, decisions out", font=font(24, True), fill=WHITE)
+    draw.text((796, 142), "Nothing on screen is a typed-in status", font=font(16), fill=SLATE)
+    for i, (label, caption, color) in enumerate([
+        ("Control evidence", "State, owner and age per artifact", INDIGO),
+        ("Derived readiness", "Weighted, explainable, tested", CYAN),
+        ("Ranked decisions", "Value, effort, confidence, leverage", GREEN),
     ]):
         top = 190 + i * 102
         rounded(draw, (796, top, 1172, top + 78), 12, PANEL_2, outline="#34425D")
         rounded(draw, (816, top + 20, 826, top + 58), 5, color)
         draw.text((846, top + 17), label, font=font(18, True), fill=WHITE)
-        draw.text((846, top + 45), "Structured ownership and review", font=font(14), fill=SLATE)
+        draw.text((846, top + 45), caption, font=font(14), fill=SLATE)
     footer(draw)
     return image
 

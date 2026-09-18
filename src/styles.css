@@ -2,33 +2,220 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color: #172033;
-  background: #f6f7fb;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/**
+ * Design tokens.
+ *
+ * Every colour in the application resolves through one of these semantic
+ * names, so the dark theme is a token swap rather than a second set of
+ * hand-tuned classes scattered through the components. Values are stored as
+ * space-separated RGB channels so Tailwind's opacity modifiers keep working
+ * (`bg-surface/60`).
+ */
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
+@layer base {
+  :root {
+    color-scheme: light;
 
-* {
-  box-sizing: border-box;
-}
+    --canvas: 246 247 250;
+    --surface: 255 255 255;
+    --surface-raised: 255 255 255;
+    --surface-sunken: 248 250 252;
 
-@layer components {
-  .page-fade {
-    animation: pageFade 220ms ease-out both;
+    --border-subtle: 226 232 240;
+    --border-strong: 203 213 225;
+
+    --text-primary: 15 23 42;
+    --text-secondary: 51 65 85;
+    /* Clears 4.5:1 against every light surface, including accent-soft. */
+    --text-muted: 71 85 105;
+    --text-inverted: 248 250 252;
+
+    --accent: 79 70 229;
+    --accent-hover: 67 56 202;
+    /* Filled controls carry their own pair so white text always clears AA. */
+    --accent-solid: 79 70 229;
+    --accent-solid-hover: 67 56 202;
+    --on-accent: 255 255 255;
+    --accent-soft: 238 242 255;
+    --accent-border: 199 210 254;
+    --accent-text: 55 48 163;
+
+    /* Evidence states. Each has a soft background and a readable foreground. */
+    --ok: 5 150 105;
+    --ok-soft: 236 253 245;
+    --ok-text: 6 95 70;
+
+    --warn: 217 119 6;
+    --warn-soft: 255 251 235;
+    --warn-text: 146 64 14;
+
+    --risk: 225 29 72;
+    --risk-soft: 255 241 242;
+    --risk-text: 159 18 57;
+
+    --info: 2 132 199;
+    --info-soft: 240 249 255;
+    --info-text: 7 89 133;
+
+    --neutral: 100 116 139;
+    --neutral-soft: 241 245 249;
+    --neutral-text: 51 65 85;
+
+    --shadow-card:
+      0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.05);
+    --shadow-raised:
+      0 2px 4px rgb(15 23 42 / 0.05), 0 16px 40px rgb(15 23 42 / 0.09);
+
+    /**
+     * Chart palette. Categorical slots are assigned in fixed order and never
+     * cycled; the ordinal ramp is a single hue for tiered magnitude. Both sets
+     * are validated for colour-vision separation and surface contrast in this
+     * mode and in dark mode — see docs/architecture.md.
+     */
+    --chart-1: #2a78d6;
+    --chart-2: #eb6834;
+    --chart-3: #1baf7a;
+    --ordinal-1: #86b6ef;
+    --ordinal-2: #5598e7;
+    --ordinal-3: #2a78d6;
+    --ordinal-4: #1c5cab;
+    --chart-grid: 226 232 240;
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    --canvas: 9 11 17;
+    --surface: 17 20 28;
+    --surface-raised: 23 27 37;
+    --surface-sunken: 13 16 23;
+
+    --border-subtle: 35 41 54;
+    --border-strong: 51 60 77;
+
+    --text-primary: 241 245 249;
+    --text-secondary: 166 177 194;
+    --text-muted: 129 140 159;
+    --text-inverted: 15 23 42;
+
+    /* Light enough to read as text on a dark surface... */
+    --accent: 129 140 248;
+    --accent-hover: 165 180 252;
+    /* ...but a filled button needs a darker fill to keep white legible. */
+    --accent-solid: 79 70 229;
+    --accent-solid-hover: 91 82 232;
+    --on-accent: 255 255 255;
+    --accent-soft: 30 34 60;
+    --accent-border: 57 62 106;
+    --accent-text: 196 205 253;
+
+    --ok: 52 211 153;
+    --ok-soft: 10 40 34;
+    --ok-text: 134 239 191;
+
+    --warn: 251 191 36;
+    --warn-soft: 46 33 9;
+    --warn-text: 253 219 141;
+
+    --risk: 251 113 133;
+    --risk-soft: 51 16 26;
+    --risk-text: 254 182 195;
+
+    --info: 56 189 248;
+    --info-soft: 8 37 53;
+    --info-text: 165 226 253;
+
+    --neutral: 148 163 184;
+    --neutral-soft: 28 33 44;
+    --neutral-text: 186 196 211;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.36);
+    --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.36), 0 16px 40px rgb(0 0 0 / 0.5);
+
+    /* Dark steps of the same hues, chosen for the dark surface. */
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --ordinal-1: #86b6ef;
+    --ordinal-2: #5598e7;
+    --ordinal-3: #2a78d6;
+    --ordinal-4: #1c5cab;
+    --chart-grid: 35 41 54;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: rgb(var(--canvas));
+    color: rgb(var(--text-primary));
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Numbers that change should not make the layout jitter. */
+  .tabular,
+  table,
+  [data-metric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* One focus treatment, applied consistently, visible in both themes. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.22);
   }
 }
 
-@keyframes pageFade {
+@layer components {
+  .page-enter {
+    animation: page-enter 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Skip link: visible only once focused. */
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 100;
+    border-radius: 0.5rem;
+    background-color: rgb(var(--accent-solid));
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--on-accent));
+    transition: top 160ms ease;
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+}
+
+@keyframes page-enter {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -36,5 +223,42 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Honour the user's motion preference rather than animating regardless. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Scrollbars that do not fight the dark theme. */
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--border-strong));
+    border-radius: 999px;
+    border: 2px solid rgb(var(--canvas));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--text-muted));
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
   }
 }

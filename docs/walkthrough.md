@@ -1,21 +1,57 @@
 # SignalTower AI Walkthrough
 
-Purpose: concise internal run-of-show and speaker notes.
+Purpose: concise run-of-show and speaker notes. For the polished external version see
+[demo-script.md](demo-script.md); for the engineering, see [architecture.md](architecture.md).
 
 ## 30-second version
 
-SignalTower AI is a control tower for enterprise AI commercialization. It shows which AI use cases are ready for production, which are stuck, why they are stuck, and what leadership decision would unlock the most value fastest. The thesis is simple: regulated enterprises do not lack AI ideas; they lack a disciplined operating layer that converts AI demand into governed production value.
+SignalTower is a control tower for enterprise AI commercialisation. It shows which AI initiatives
+are ready for production, which are stuck, what specifically is stopping them, and which leadership
+decision would release the most value soonest.
+
+The thesis: regulated enterprises do not lack AI ideas. They lack an operating layer that converts
+AI demand into governed production value — and the friction is almost always the control evidence,
+not the model.
 
 ## 2-minute version
 
-Start on the Executive Portfolio page. Explain that the organization has 12 active AI initiatives with roughly $18M in value at stake, but only a small number are truly production-ready.
+**Portfolio.** Twelve active initiatives, $18.4M of annual value at stake, three production-ready.
+Lead with the divergence: readiness averages 67%, but 62% once weighted by value. The bigger bets
+are the less ready ones.
 
-Move to the Readiness Board. Show that readiness is not just model performance. It includes sponsor clarity, KPI baseline, data readiness, lineage, security, privacy, model risk, human review, monitoring, and value tracking.
+**Readiness.** Open the control matrix — twelve controls across every initiative. The vertical
+stripes are the point: these are gaps that several teams are each solving separately. Note that
+readiness is not a model-quality score; it is sponsor clarity, KPI baseline, data readiness,
+lineage, security, privacy, model risk, human oversight, monitoring and value tracking, weighted by
+risk tier.
 
-Open the Evidence Passport for the Relationship Manager Briefing Assistant. Explain that the use case has strong value but cannot responsibly move forward because two upstream data fields lack lineage ownership.
+**Evidence passport.** Open the Relationship Manager Briefing Assistant. Strong value, 69% ready,
+and it cannot responsibly advance because two upstream relationship-data fields have no documented
+owner. Scroll to "How this score was produced" — the score can be taken apart control by control.
+Point out the control debt banner: this initiative is sitting in Control Review, a stage that
+required data quality and lineage, neither of which was ever approved.
 
-Move to Bottlenecks. Show that repeated blockers trap value across the portfolio. This is where leadership can stop treating each AI delay as a one-off issue and start improving the operating model.
+**Bottlenecks.** Where value is trapped, and which review function is the actual constraint. This
+is the shift from treating each delay as an escalation to treating the repeated ones as an
+operating-model problem.
 
-End on Executive Decisions. Show the decisions leadership should make this week to unlock value while preserving control quality.
+**Decisions.** A ranked queue. The top item is usually systemic: one control blocking several
+initiatives at once, where the answer is to build the pattern once rather than schedule N reviews.
+Every card shows the value, effort, confidence, urgency and leverage that produced its position.
 
-Close with the thesis: the goal is not to bypass governance. The goal is to make governance visible, reusable, measurable, and fast enough to support production AI adoption.
+**Simulator.** Close here. Tick the remediations, or load the top three decisions, and watch the
+whole portfolio re-derive — readiness, gates, stage promotions, the conversion forecast. Same
+engine, modified evidence, no second model.
+
+## Closing line
+
+The goal is not to bypass governance. It is to make governance visible, reusable, measurable and
+fast enough to support production AI adoption — and to make the numbers leaders act on something
+they can interrogate rather than something they have to trust.
+
+## If asked about the engineering
+
+Nothing in the data file is a score. It records control evidence — state, owner, age — and a tested
+engine derives readiness, blockers, gate verdicts, the decision ranking and the forecast. That is
+what makes the simulator possible and what makes the scoring challengeable. 307 unit tests, 56
+end-to-end tests, zero accessibility violations at WCAG 2.1 AA.
