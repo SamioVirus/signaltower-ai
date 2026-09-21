@@ -10,7 +10,7 @@ import { expect, test } from "@playwright/test";
  */
 
 const ROUTES = [
-  { path: "/", heading: /stalls on the evidence/i },
+  { path: "/", heading: /stalls on (the )?evidence/i },
   { path: "/portfolio", heading: /AI commercialisation portfolio/i },
   { path: "/readiness", heading: /What is the evidence/i },
   {

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signal Tower</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f4f2ed;
+      --ink: #1b1a17;
+      --muted: #6a655c;
+      --line: #ddd8ce;
+      --navy: #1e3a5f;
+      --warn: #8a3b2a;
+      --ok: #2c5a3d;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--paper); color: var(--ink); }
+    body {
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .brand { font-weight: 600; letter-spacing: -0.02em; }
+    nav { display: flex; align-items: center; gap: 28px; color: var(--muted); font-size: 14px; }
+    nav a:hover { color: var(--ink); }
+    .btn {
+      background: var(--navy);
+      color: #fff;
+      padding: 8px 13px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-family: "Source Serif 4", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(34px, 4.6vw, 48px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin: 56px 0 0;
+      max-width: 16ch;
+    }
+
+    .figures {
+      display: flex;
+      gap: 40px;
+      margin: 40px 0 56px;
+      padding: 0;
+      list-style: none;
+    }
+    .figures li { min-width: 7rem; }
+    .figures b {
+      display: block;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    .figures span { color: var(--muted); font-size: 13px; }
+    .figures .held b { color: var(--warn); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      font-weight: 400;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 0 16px 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    td {
+      padding: 16px 16px 16px 0;
+      border-bottom: 1px solid var(--line);
+      vertical-align: baseline;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .muted { color: var(--muted); }
+    .hold { color: var(--warn); }
+    .ready { color: var(--ok); }
+    .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    footer {
+      max-width: 1080px;
+      margin: 64px auto 48px;
+      padding: 0 32px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      nav a { display: none; }
+      .figures { flex-wrap: wrap; gap: 24px 32px; }
+      h1 { max-width: none; margin-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="#">Signal Tower</a>
+    <nav>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#method">Method</a>
+      <a class="btn" href="#open">Open</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Enterprise AI stalls on evidence, not on the model.</h1>
+
+    <ul class="figures">
+      <li><b>12</b><span>in review</span></li>
+      <li><b>$18.4m</b><span>at stake</span></li>
+      <li class="held"><b>$15.5m</b><span>held</span></li>
+      <li><b>84%</b><span>waiting</span></li>
+    </ul>
+
+    <table id="portfolio">
+      <thead>
+        <tr>
+          <th>Initiative</th>
+          <th>Stage</th>
+          <th>Capital</th>
+          <th></th>
+          <th>Waiting on</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Relationship manager briefing</td>
+          <td class="muted">Control review</td>
+          <td class="num">$4.2m</td>
+          <td class="hold">Held</td>
+          <td class="muted">Sponsor record, residual-risk sign-off</td>
+        </tr>
+        <tr>
+          <td>Vendor diligence</td>
+          <td class="muted">Design</td>
+          <td class="num">$800k</td>
+          <td class="ready">Ready</td>
+          <td class="muted">—</td>
+        </tr>
+        <tr>
+          <td>Regulatory correspondence</td>
+          <td class="muted">Control review</td>
+          <td class="num">$900k</td>
+          <td class="hold">Held</td>
+          <td class="muted">Outbound-text policy</td>
+        </tr>
+        <tr>
+          <td>Client service triage</td>
+          <td class="muted">Pilot</td>
+          <td class="num">$1.5m</td>
+          <td class="hold">Held</td>
+          <td class="muted">Edge-case review log</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer>Signal Tower</footer>
+</body>
+</html>
