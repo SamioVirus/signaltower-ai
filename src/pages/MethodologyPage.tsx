@@ -1,5 +1,11 @@
 import { Page, PageHeader } from "@/components/ui/PageHeader";
-import { Card, CardBody, CardHeader } from "@/components/ui/Primitives";
+import {
+  Panel,
+  PanelBody,
+  PanelHeader,
+  Section,
+  SectionTitle,
+} from "@/components/ui/Primitives";
 import { DEFAULT_CREDIT, DEFAULT_POLICY } from "@/engine/policy";
 import { TEMPLATE_REUSE_FACTOR } from "@/engine/forecast";
 import { RISK_TIERS } from "@/engine/types";
@@ -21,103 +27,99 @@ export const MethodologyPage = () => (
       lede="SignalTower stores control evidence and derives everything else. This page is generated from the policy object the engine actually executes, so it cannot fall out of step with the scoring."
     />
 
-    <Card>
-      <CardHeader
+    <Section>
+      <SectionTitle
         title="The data model"
         description="What is recorded, and what is computed."
       />
-      <CardBody className="grid gap-5 md:grid-cols-2">
-        <div>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="border-t border-subtle pt-4">
           <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
             Stored as evidence
           </p>
-          <ul className="mt-2 space-y-1.5 text-sm text-secondary">
+          <ul className="mt-3 space-y-2 text-sm text-secondary">
             {[
               "The state of each control artifact: missing, in progress, partial, approved, or not applicable",
               "Who owns each artifact and how long it has sat at its current state",
               "A short factual note describing what exists today",
               "Stage, risk tier, sponsor-estimated annual value, data classification and model characteristics",
             ].map((item) => (
-              <li key={item} className="flex gap-2">
+              <li key={item} className="flex items-start gap-2.5">
                 <span
-                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-ok"
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ok"
                   aria-hidden="true"
                 />
-                {item}
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div>
+        <div className="border-t border-subtle pt-4">
           <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
             Derived by the engine
           </p>
-          <ul className="mt-2 space-y-1.5 text-sm text-secondary">
+          <ul className="mt-3 space-y-2 text-sm text-secondary">
             {[
               "Readiness score and band, with a per-control contribution breakdown",
               "Stage-gate verdicts, blockers, and control debt",
               "Portfolio patterns and which controls are systemic",
               "The ranked decision queue and the conversion forecast",
             ].map((item) => (
-              <li key={item} className="flex gap-2">
+              <li key={item} className="flex items-start gap-2.5">
                 <span
-                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent"
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
                   aria-hidden="true"
                 />
-                {item}
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </Section>
 
-    <Card>
-      <CardHeader
+    <Section>
+      <SectionTitle
         title="Evidence credit"
         description="How much readiness credit each state earns before weighting."
       />
-      <CardBody>
-        <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {(
-            Object.keys(DEFAULT_CREDIT) as Array<keyof typeof DEFAULT_CREDIT>
-          ).map((state) => (
-            <li
-              key={state}
-              className="rounded-lg border border-subtle bg-surface-sunken p-3"
-            >
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-medium text-primary">
-                  {EVIDENCE_TONES[state].label}
-                </span>
-                <span data-metric className="text-sm font-semibold text-accent">
-                  {formatPercent(DEFAULT_CREDIT[state] * 100)}
-                </span>
-              </div>
-              <p className="mt-1 text-xs leading-5 text-muted">
-                {EVIDENCE_TONES[state].description}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-4 rounded-lg border border-subtle bg-surface-sunken p-3 text-xs leading-5 text-muted">
-          <span className="font-semibold text-secondary">
-            Not applicable is not a pass.
-          </span>{" "}
-          An inapplicable control is removed from the denominator entirely. A
-          workflow that takes no action is neither rewarded nor penalised for
-          lacking autonomy controls; an agentic one is scored against them in
-          full.
-        </p>
-      </CardBody>
-    </Card>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {(
+          Object.keys(DEFAULT_CREDIT) as Array<keyof typeof DEFAULT_CREDIT>
+        ).map((state) => (
+          <div key={state} className="border-t border-subtle pt-3">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-sm font-medium text-primary">
+                {EVIDENCE_TONES[state].label}
+              </span>
+              <span data-metric className="text-sm font-semibold text-accent">
+                {formatPercent(DEFAULT_CREDIT[state] * 100)}
+              </span>
+            </div>
+            <p className="mt-1 text-xs leading-5 text-muted">
+              {EVIDENCE_TONES[state].description}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 border-l-2 border-accent pl-3.5 py-1 text-xs leading-5 text-muted">
+        <span className="font-semibold text-secondary">
+          Not applicable is not a pass.
+        </span>{" "}
+        An inapplicable control is removed from the denominator entirely. A
+        workflow that takes no action is neither rewarded nor penalised for
+        lacking autonomy controls; an agentic one is scored against them in
+        full.
+      </div>
+    </Section>
 
-    <Card>
-      <CardHeader
+    <Panel as="section" aria-labelledby="catalogue-title">
+      <PanelHeader
+        id="catalogue-title"
         title={`Control catalogue — policy ${DEFAULT_POLICY.version}`}
         description="Weights vary by risk tier. The gate column is the stage by which a control must be approved."
       />
-      <CardBody>
+      <PanelBody>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[820px] text-left text-sm">
             <caption className="sr-only">
@@ -185,75 +187,71 @@ export const MethodologyPage = () => (
             </tbody>
           </table>
         </div>
-      </CardBody>
-    </Card>
+      </PanelBody>
+    </Panel>
 
-    <Card>
-      <CardHeader
+    <Section>
+      <SectionTitle
         title="Model assumptions"
         description="Stated plainly, because they are choices."
       />
-      <CardBody>
-        <dl className="space-y-4 text-sm">
-          <Assumption
-            term="Readiness"
-            detail="A weighted percentage of achievable control credit. It measures evidence completeness, not the quality of the underlying work, and a perfectly scored initiative can still be a bad idea."
-          />
-          <Assumption
-            term="Ageing"
-            detail={`Blocker severity is amplified by up to 2x as evidence ages, saturating at ${DEFAULT_POLICY.ageSaturationDays} days. Without a ceiling one very old item would dominate every ranking.`}
-          />
-          <Assumption
-            term="Systemic threshold"
-            detail={`A control becomes systemic once it blocks ${DEFAULT_POLICY.systemicThreshold} or more initiatives at their next gate at the same time. Counting everything still outstanding somewhere would mark nearly every control systemic, which is no signal at all.`}
-          />
-          <Assumption
-            term="Confidence"
-            detail="Derived from readiness as a proxy for how likely remediation is to convert the initiative. It is a heuristic, not a probability drawn from historical conversion data — there is none, because the portfolio is synthetic."
-          />
-          <Assumption
-            term="Forecast capacity"
-            detail="A fixed number of control-team days per week, spent on the front of the queue. Both strategies get identical capacity and both finish one initiative before starting the next; only the ordering differs. The ranked queue orders by value per remaining day of effort — weighted shortest processing time — while the oldest-first queue ignores value and cost entirely."
-          />
-          <Assumption
-            term="Template reuse"
-            detail={`In the value-ranked queue, applying a systemic control a second time costs ${Math.round(TEMPLATE_REUSE_FACTOR * 100)}% of building it from scratch. The oldest-first queue pays full price every time, because working ticket by ticket is precisely what stops anyone noticing the pattern. This assumption favours the ranked queue, and it is the main reason it wins.`}
-          />
-          <Assumption
-            term="Stage promotion"
-            detail="Evidence can carry an initiative as far as Production Ready. Going live is a release decision with an operational tail, not another artifact, so no simulation promotes past that point."
-          />
-        </dl>
-      </CardBody>
-    </Card>
+      <dl className="space-y-4 text-sm">
+        <Assumption
+          term="Readiness"
+          detail="A weighted percentage of achievable control credit. It measures evidence completeness, not the quality of the underlying work, and a perfectly scored initiative can still be a bad idea."
+        />
+        <Assumption
+          term="Ageing"
+          detail={`Blocker severity is amplified by up to 2x as evidence ages, saturating at ${DEFAULT_POLICY.ageSaturationDays} days. Without a ceiling one very old item would dominate every ranking.`}
+        />
+        <Assumption
+          term="Systemic threshold"
+          detail={`A control becomes systemic once it blocks ${DEFAULT_POLICY.systemicThreshold} or more initiatives at their next gate at the same time. Counting everything still outstanding somewhere would mark nearly every control systemic, which is no signal at all.`}
+        />
+        <Assumption
+          term="Confidence"
+          detail="Derived from readiness as a proxy for how likely remediation is to convert the initiative. It is a heuristic, not a probability drawn from historical conversion data — there is none, because the portfolio is synthetic."
+        />
+        <Assumption
+          term="Forecast capacity"
+          detail="A fixed number of control-team days per week, spent on the front of the queue. Both strategies get identical capacity and both finish one initiative before starting the next; only the ordering differs. The ranked queue orders by value per remaining day of effort — weighted shortest processing time — while the oldest-first queue ignores value and cost entirely."
+        />
+        <Assumption
+          term="Template reuse"
+          detail={`In the value-ranked queue, applying a systemic control a second time costs ${Math.round(TEMPLATE_REUSE_FACTOR * 100)}% of building it from scratch. The oldest-first queue pays full price every time, because working ticket by ticket is precisely what stops anyone noticing the pattern. This assumption favours the ranked queue, and it is the main reason it wins.`}
+        />
+        <Assumption
+          term="Stage promotion"
+          detail="Evidence can carry an initiative as far as Production Ready. Going live is a release decision with an operational tail, not another artifact, so no simulation promotes past that point."
+        />
+      </dl>
+    </Section>
 
-    <Card>
-      <CardHeader title="What this is not" />
-      <CardBody>
-        <ul className="space-y-2 text-sm leading-6 text-secondary">
-          {[
-            "It is not real data. Every initiative, owner, metric and value is synthetic, and no real institution or system is represented.",
-            "It is not a risk assessment. The control catalogue is a plausible composite, not any specific regulatory framework.",
-            "It is not a prediction. The forecast is a deterministic queue model whose purpose is to make the cost of poor sequencing visible.",
-            "It has no backend. There is no API, no authentication, no database and no tracking — the entire application is a static bundle.",
-          ].map((item) => (
-            <li key={item} className="flex gap-2.5">
-              <span
-                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-muted"
-                aria-hidden="true"
-              />
-              {item}
-            </li>
-          ))}
-        </ul>
-      </CardBody>
-    </Card>
+    <Section>
+      <SectionTitle title="What this is not" />
+      <ul className="space-y-2.5 text-sm leading-6 text-secondary">
+        {[
+          "It is not real data. Every initiative, owner, metric and value is synthetic, and no real institution or system is represented.",
+          "It is not a risk assessment. The control catalogue is a plausible composite, not any specific regulatory framework.",
+          "It is not a prediction. The forecast is a deterministic queue model whose purpose is to make the cost of poor sequencing visible.",
+          "It has no backend. There is no API, no authentication, no database and no tracking — the entire application is a static bundle.",
+        ].map((item) => (
+          <li key={item} className="flex items-start gap-2.5">
+            <span
+              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-muted"
+              aria-hidden="true"
+            />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </Section>
   </Page>
 );
 
 const Assumption = ({ term, detail }: { term: string; detail: string }) => (
-  <div className="border-l-2 border-accent-border pl-4">
+  <div className="border-l-2 border-accent pl-4">
     <dt className="font-semibold text-primary">{term}</dt>
-    <dd className="mt-1 max-w-4xl leading-6 text-muted">{detail}</dd>
+    <dd className="mt-1 max-w-measure leading-6 text-muted">{detail}</dd>
   </div>
 );

@@ -20,10 +20,11 @@ import { EvidenceBadge } from "@/components/domain/Indicators";
 import { Page, PageHeader } from "@/components/ui/PageHeader";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
+  Callout,
   Mono,
+  Panel,
+  PanelBody,
+  PanelHeader,
 } from "@/components/ui/Primitives";
 import { portfolio } from "@/data/portfolio";
 import { deriveGaps } from "@/engine/blockers";
@@ -164,72 +165,63 @@ export const SimulatorPage = () => {
         }
       />
 
-      <Card
-        className={cn(scenario.actions.length > 0 && "border-accent-border")}
-      >
-        <CardBody>
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold text-primary">
-                {scenario.actions.length === 0
-                  ? "No remediations selected"
-                  : `${formatCount(scenario.actions.length, "remediation")} selected`}
-              </p>
-              <p className="mt-1 text-sm text-muted">
-                {scenario.actions.length === 0
-                  ? "Pick control evidence to approve, or load the decision queue's top three."
-                  : `Committing ${formatDays(effortDays)} of control-team effort.`}
-              </p>
-            </div>
-          </div>
+      {scenario.actions.length > 0 ? (
+        <Callout
+          title={`${formatCount(scenario.actions.length, "remediation")} selected`}
+        >
+          Committing {formatDays(effortDays)} of control-team effort. Readiness,
+          stage promotions and conversion forecasts below reflect these
+          approvals.
+        </Callout>
+      ) : (
+        <p className="border-b border-subtle pb-4 text-sm text-secondary">
+          No remediations selected. Pick control evidence to approve below, or
+          load the decision queue&rsquo;s top three recommendations.
+        </p>
+      )}
 
-          <dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            {deltas.map((delta) => (
-              <div
-                key={delta.label}
+      {/* Cockpit: deltas on the canvas tier */}
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-b border-subtle pb-8 sm:grid-cols-3 xl:grid-cols-5 xl:gap-x-8">
+        {deltas.map((delta) => (
+          <div
+            key={delta.label}
+            className="min-w-0 xl:border-l xl:border-subtle xl:pl-5 xl:first:border-l-0 xl:first:pl-0"
+          >
+            <dt className="text-2xs font-medium uppercase tracking-wider text-muted">
+              {delta.label}
+            </dt>
+            <dd className="mt-2 flex items-baseline gap-2">
+              <span
+                data-metric
+                className="text-sm text-muted line-through decoration-1"
+              >
+                {delta.before}
+              </span>
+              <ArrowRight
+                className="h-3 w-3 shrink-0 text-muted"
+                aria-hidden="true"
+              />
+              <span
+                data-metric
                 className={cn(
-                  "rounded-lg border p-3 transition",
-                  delta.changed
-                    ? "border-accent-border bg-accent-soft"
-                    : "border-subtle bg-surface-sunken",
+                  "text-[1.75rem] font-semibold leading-none tracking-[-0.02em]",
+                  delta.changed ? "text-accent-text" : "text-primary",
                 )}
               >
-                <dt className="text-2xs font-semibold uppercase tracking-wider text-muted">
-                  {delta.label}
-                </dt>
-                <dd className="mt-1.5 flex items-center gap-2">
-                  <span
-                    data-metric
-                    className="text-sm text-muted line-through decoration-1"
-                  >
-                    {delta.before}
-                  </span>
-                  <ArrowRight
-                    className="h-3 w-3 shrink-0 text-muted"
-                    aria-hidden="true"
-                  />
-                  <span
-                    data-metric
-                    className={cn(
-                      "text-lg font-semibold",
-                      delta.changed ? "text-accent-text" : "text-primary",
-                    )}
-                  >
-                    {delta.after}
-                  </span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </CardBody>
-      </Card>
+                {delta.after}
+              </span>
+            </dd>
+          </div>
+        ))}
+      </dl>
 
-      <Card>
-        <CardHeader
+      <Panel as="section" aria-labelledby="forecast-title">
+        <PanelHeader
+          id="forecast-title"
           title="Conversion forecast under this scenario"
           description="Annualised value reaching production readiness, week by week, under two ways of ordering the same finite control capacity."
         />
-        <CardBody>
+        <PanelBody>
           <ChartFrame height={280}>
             <LineChart
               data={chartData}
@@ -299,7 +291,7 @@ export const SimulatorPage = () => {
             ]}
           />
 
-          <p className="mt-4 rounded-lg border border-subtle bg-surface-sunken p-3 text-xs leading-5 text-muted">
+          <div className="mt-5 border-t border-subtle pt-4 text-xs leading-5 text-muted">
             On this scenario the ranked queue reaches the same value roughly{" "}
             <span className="font-semibold text-secondary">
               {forecast.weeksSooner.toFixed(1)} weeks sooner
@@ -311,16 +303,17 @@ export const SimulatorPage = () => {
             of earlier realisation. Both queues spend identical capacity; only
             the order differs. The model&rsquo;s assumptions are listed on the
             Methodology page.
-          </p>
-        </CardBody>
-      </Card>
+          </div>
+        </PanelBody>
+      </Panel>
 
-      <Card>
-        <CardHeader
+      <Panel as="section" aria-labelledby="evidence-title">
+        <PanelHeader
+          id="evidence-title"
           title="Outstanding control evidence"
           description="Tick a control to model it being approved. Grouped by initiative, least ready first."
         />
-        <CardBody className="space-y-5">
+        <PanelBody className="space-y-6">
           {[...portfolio]
             .map((initiative) => ({ initiative, gaps: deriveGaps(initiative) }))
             .filter((row) => row.gaps.length > 0)
@@ -338,7 +331,10 @@ export const SimulatorPage = () => {
               ).score;
 
               return (
-                <div key={initiative.id}>
+                <div
+                  key={initiative.id}
+                  className="border-b border-subtle pb-6 last:border-b-0 last:pb-0"
+                >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-sm font-semibold text-primary">
                       {initiative.name} <Mono>{initiative.id}</Mono>
@@ -356,7 +352,7 @@ export const SimulatorPage = () => {
                     </p>
                   </div>
 
-                  <ul className="mt-2 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                  <ul className="mt-3 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
                     {gaps.map((gap) => {
                       const action = {
                         initiativeId: initiative.id,
@@ -370,10 +366,10 @@ export const SimulatorPage = () => {
                           <label
                             htmlFor={inputId}
                             className={cn(
-                              "flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition",
+                              "flex cursor-pointer items-start gap-2.5 rounded-control border p-3 transition-colors",
                               selected
-                                ? "border-accent-border bg-accent-soft"
-                                : "border-subtle bg-surface-sunken hover:border-strong",
+                                ? "border-accent bg-accent-soft text-accent-text"
+                                : "border-subtle bg-surface hover:bg-surface-sunken",
                             )}
                           >
                             <input
@@ -388,7 +384,7 @@ export const SimulatorPage = () => {
                               aria-label={`Approve ${gap.control.label} for ${initiative.name}`}
                               className="mt-0.5 h-4 w-4 shrink-0 rounded border-strong accent-[rgb(var(--accent))]"
                             />
-                            <span className="min-w-0">
+                            <span className="min-w-0 flex-1">
                               <span className="block text-sm font-medium text-primary">
                                 {gap.control.label}
                               </span>
@@ -415,8 +411,8 @@ export const SimulatorPage = () => {
                 </div>
               );
             })}
-        </CardBody>
-      </Card>
+        </PanelBody>
+      </Panel>
     </Page>
   );
 };

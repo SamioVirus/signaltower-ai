@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
+import { Check } from "lucide-react";
 
 import { Page, PageHeader } from "@/components/ui/PageHeader";
-import { Card, CardBody, CardHeader } from "@/components/ui/Primitives";
+import { Callout, Panel } from "@/components/ui/Primitives";
 import { portfolio } from "@/data/portfolio";
 import { blockerPatterns } from "@/engine/blockers";
 import { portfolioMetrics } from "@/engine/portfolio";
@@ -13,6 +14,7 @@ import {
 
 const PHASES = [
   {
+    step: "01",
     period: "Days 1–30",
     title: "Inventory and evidence capture",
     summary:
@@ -26,6 +28,7 @@ const PHASES = [
     ],
   },
   {
+    step: "02",
     period: "Days 31–60",
     title: "Reusable control patterns",
     summary:
@@ -39,6 +42,7 @@ const PHASES = [
     ],
   },
   {
+    step: "03",
     period: "Days 61–90",
     title: "Conversion and proof",
     summary:
@@ -67,75 +71,93 @@ export const OperatingModelPage = () => {
         lede="A control tower is only worth building if it changes how decisions get made. This is the operating rhythm the rest of the application is designed to support."
       />
 
-      <Card className="border-accent-border bg-accent-soft">
-        <CardBody>
-          <p className="max-w-4xl text-sm leading-6 text-accent-text">
-            Against this portfolio, the 90 days would start from{" "}
-            <span className="font-semibold">
-              {formatPercent(metrics.averageReadiness)} average readiness
-            </span>
-            , {formatCount(metrics.blockedCount, "initiative")} blocked at their
-            next gate, and {formatCompactCurrency(metrics.blockedValueUsd)} of
-            annual value waiting on control evidence.{" "}
-            {systemic.length > 0
-              ? `Phase two would begin with ${systemic.map((pattern) => pattern.control.label.toLowerCase()).join(" and ")}, the control blocking the most initiatives at once.`
-              : "No control is currently systemic, so phase two would focus on the highest-value individual gaps."}
-          </p>
-        </CardBody>
-      </Card>
+      <Callout title="Baseline against this portfolio">
+        The 90 days would start from{" "}
+        <span className="font-semibold">
+          {formatPercent(metrics.averageReadiness)} average readiness
+        </span>
+        , {formatCount(metrics.blockedCount, "initiative")} blocked at their
+        next gate, and {formatCompactCurrency(metrics.blockedValueUsd)} of
+        annual value waiting on control evidence.{" "}
+        {systemic.length > 0
+          ? `Phase two would begin with ${systemic.map((pattern) => pattern.control.label.toLowerCase()).join(" and ")}, the control blocking the most initiatives at once.`
+          : "No control is currently systemic, so phase two would focus on the highest-value individual gaps."}
+      </Callout>
 
-      <section className="grid gap-5 xl:grid-cols-3">
-        {PHASES.map((phase, index) => (
-          <Card key={phase.period} as="article" className="flex flex-col">
-            <CardHeader title={phase.title} description={phase.period} />
-            <CardBody className="flex flex-1 flex-col">
-              <p className="text-sm leading-6 text-secondary">
-                {phase.summary}
-              </p>
-              <ol className="mt-5 flex-1 space-y-2.5">
-                {phase.outcomes.map((outcome, outcomeIndex) => (
-                  <li
-                    key={outcome}
-                    className="flex gap-3 text-sm leading-6 text-secondary"
+      <section aria-label="90-day execution roadmap">
+        <div className="grid gap-6 xl:grid-cols-3">
+          {PHASES.map((phase) => (
+            <Panel
+              key={phase.period}
+              as="article"
+              className="flex flex-col justify-between"
+            >
+              <div className="p-6">
+                <div className="flex items-baseline justify-between border-b border-subtle pb-4">
+                  <span
+                    data-metric
+                    className="font-mono text-2xl font-bold tracking-tight text-accent"
                   >
-                    <span
-                      data-metric
-                      className="shrink-0 font-mono text-2xs font-semibold text-accent"
-                      aria-hidden="true"
-                    >
-                      {index + 1}.{outcomeIndex + 1}
-                    </span>
-                    {outcome}
-                  </li>
-                ))}
-              </ol>
-            </CardBody>
-          </Card>
-        ))}
+                    {phase.step}
+                  </span>
+                  <span className="rounded bg-surface-sunken px-2 py-0.5 font-mono text-2xs font-semibold uppercase tracking-wider text-muted">
+                    {phase.period}
+                  </span>
+                </div>
+
+                <h2 className="mt-4 text-base font-semibold leading-snug text-primary">
+                  {phase.title}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-secondary">
+                  {phase.summary}
+                </p>
+
+                <div className="mt-6 border-t border-subtle pt-4">
+                  <p className="text-2xs font-semibold uppercase tracking-wider text-muted">
+                    Key commitments
+                  </p>
+                  <ul className="mt-3 space-y-2.5">
+                    {phase.outcomes.map((outcome) => (
+                      <li
+                        key={outcome}
+                        className="flex items-start gap-2.5 text-sm leading-5 text-secondary"
+                      >
+                        <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-text">
+                          <Check className="h-2.5 w-2.5" aria-hidden="true" />
+                        </span>
+                        <span>{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Panel>
+          ))}
+        </div>
       </section>
 
-      <Card>
-        <CardHeader title="Why this order" />
-        <CardBody>
-          <p className="max-w-4xl text-sm leading-6 text-secondary">
-            Most AI governance programmes start by writing the standard and end
-            up with a document that the tooling does not enforce and the
-            delivery teams route around. This order inverts that: capture the
-            evidence first so the gaps are observable, build the reusable
-            controls the evidence says are actually blocking work, and only then
-            argue about policy — with conversion data in hand. The scoring
-            policy on the{" "}
-            <Link
-              to="/methodology"
-              className="font-medium text-accent hover:underline"
-            >
-              Methodology
-            </Link>{" "}
-            page is a working example of the end state: a rule that executes
-            rather than a rule that is merely published.
-          </p>
-        </CardBody>
-      </Card>
+      <section className="border-t border-subtle pt-8">
+        <div className="signal-rule mb-4" aria-hidden="true" />
+        <h2 className="text-base font-semibold text-primary">
+          Why this sequence
+        </h2>
+        <p className="mt-2 max-w-measure text-sm leading-6 text-secondary">
+          Most AI governance programmes start by writing the standard and end up
+          with a document that the tooling does not enforce and the delivery
+          teams route around. This sequence inverts that: capture the evidence
+          first so the gaps are observable, build the reusable controls the
+          evidence says are actually blocking work, and only then argue about
+          policy — with conversion data in hand. The scoring policy on the{" "}
+          <Link
+            to="/methodology"
+            className="font-medium text-accent hover:underline"
+          >
+            Methodology
+          </Link>{" "}
+          page is a working example of the end state: a rule that executes
+          rather than a rule that is merely published.
+        </p>
+      </section>
     </Page>
   );
 };

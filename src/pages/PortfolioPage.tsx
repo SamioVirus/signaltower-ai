@@ -15,9 +15,10 @@ import { Stat, StatStrip } from "@/components/domain/Indicators";
 import { InitiativeTable } from "@/components/domain/InitiativeTable";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
+  Callout,
+  Panel,
+  PanelBody,
+  PanelHeader,
   SectionTitle,
 } from "@/components/ui/Primitives";
 import { Page, PageHeader } from "@/components/ui/PageHeader";
@@ -127,37 +128,39 @@ export const PortfolioPage = () => {
       </StatStrip>
 
       {/* The one sentence a leader should leave with. */}
+      {/* The one sentence a leader should leave with. */}
       {worstPattern ? (
-        <div className="flex flex-wrap items-center justify-between gap-5 rounded-panel border-l-2 border-accent bg-accent-soft px-5 py-4">
-          <p className="max-w-measure text-label leading-6 text-accent-text">
-            <span className="font-semibold">
-              Readiness is {formatPercent(metrics.averageReadiness)} on average,
-              but {formatPercent(metrics.valueWeightedReadiness)} once weighted
-              by value.
-            </span>{" "}
-            The larger bets are the less ready ones. The single widest gap is{" "}
-            <span className="font-semibold">
-              {worstPattern.control.label.toLowerCase()}
-            </span>
-            , outstanding on {formatCount(worstPattern.count, "initiative")} and
-            blocking {worstPattern.blockingNowCount} of them right now.
-          </p>
-          <Link
-            to="/bottlenecks"
-            className="shrink-0 rounded-lg bg-accent-solid px-3.5 py-2 text-sm font-semibold text-on-accent transition hover:bg-accent-solid-hover"
-          >
-            See where value is trapped
-          </Link>
-        </div>
+        <Callout
+          action={
+            <Link
+              to="/bottlenecks"
+              className="inline-flex h-9 items-center gap-2 rounded-control bg-accent-solid px-3.5 text-label font-medium text-on-accent transition-colors hover:bg-accent-solid-hover"
+            >
+              See where value is trapped
+            </Link>
+          }
+        >
+          <span className="font-semibold">
+            Readiness is {formatPercent(metrics.averageReadiness)} on average,
+            but {formatPercent(metrics.valueWeightedReadiness)} once weighted by
+            value.
+          </span>{" "}
+          The larger bets are the less ready ones. The single widest gap is{" "}
+          <span className="font-semibold">
+            {worstPattern.control.label.toLowerCase()}
+          </span>
+          , outstanding on {formatCount(worstPattern.count, "initiative")} and
+          blocking {worstPattern.blockingNowCount} of them right now.
+        </Callout>
       ) : null}
 
       <section className="grid gap-5 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
-          <CardHeader
+        <Panel as="article" className="xl:col-span-2">
+          <PanelHeader
             title="Stage funnel"
             description="Where AI demand sits on the governed path to production."
           />
-          <CardBody>
+          <PanelBody>
             <ChartFrame height={260}>
               <BarChart
                 data={stages}
@@ -197,15 +200,15 @@ export const PortfolioPage = () => {
                 />
               </BarChart>
             </ChartFrame>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
 
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Risk mix"
             description="Tier drives how heavily controls are weighted."
           />
-          <CardBody>
+          <PanelBody>
             <div className="relative">
               <ChartFrame height={170}>
                 <PieChart>
@@ -268,8 +271,8 @@ export const PortfolioPage = () => {
                 </li>
               ))}
             </ul>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
       </section>
 
       <section>
@@ -287,23 +290,25 @@ export const PortfolioPage = () => {
         />
         <div className="grid gap-4 lg:grid-cols-3">
           {decisions.map((decision, index) => (
-            <Card key={decision.id} as="article" className="flex flex-col">
-              <CardBody className="flex flex-1 flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="grid h-6 w-6 place-items-center rounded-md bg-accent-soft text-2xs font-bold text-accent-text">
-                    {index + 1}
-                  </span>
-                  <span className="text-2xs font-semibold uppercase tracking-wider text-muted">
-                    {decision.kind === "systemic" ? "Systemic" : "Initiative"} ·{" "}
-                    {decision.horizon}
-                  </span>
+            <Panel key={decision.id} as="article" className="flex flex-col">
+              <PanelBody className="flex flex-1 flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-6 w-6 place-items-center rounded bg-accent-soft text-2xs font-bold text-accent-text">
+                      {index + 1}
+                    </span>
+                    <span className="text-2xs font-semibold uppercase tracking-wider text-muted">
+                      {decision.kind === "systemic" ? "Systemic" : "Initiative"}{" "}
+                      · {decision.horizon}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 text-sm font-semibold leading-6 text-primary">
+                    {decision.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">
+                    {decision.rationale}
+                  </p>
                 </div>
-                <h3 className="mt-3 text-sm font-semibold leading-6 text-primary">
-                  {decision.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-6 text-muted">
-                  {decision.rationale}
-                </p>
                 <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-subtle pt-3">
                   <div>
                     <dt className="text-2xs uppercase tracking-wider text-muted">
@@ -328,8 +333,8 @@ export const PortfolioPage = () => {
                     </dd>
                   </div>
                 </dl>
-              </CardBody>
-            </Card>
+              </PanelBody>
+            </Panel>
           ))}
         </div>
       </section>

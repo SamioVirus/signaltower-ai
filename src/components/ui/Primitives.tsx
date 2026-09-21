@@ -38,7 +38,7 @@ export const Section = ({
 }: {
   children: ReactNode;
   className?: string;
-  as?: "section" | "div" | "article";
+  as?: "section" | "div" | "article" | "aside";
   labelledBy?: string;
 }) => (
   <Tag aria-labelledby={labelledBy} className={cn("space-y-4", className)}>
@@ -86,7 +86,7 @@ export const Panel = ({
 }: {
   children: ReactNode;
   className?: string;
-  as?: "section" | "div" | "article";
+  as?: "section" | "div" | "article" | "aside";
   labelledBy?: string;
 }) => (
   <Tag
@@ -271,4 +271,63 @@ export const Mono = ({
   >
     {children}
   </span>
+);
+
+/** Editorial briefing callout. Never a generic card with a border; an intentional signal. */
+export const Callout = ({
+  children,
+  className,
+  tone = "accent",
+  title,
+  action,
+}: {
+  children: ReactNode;
+  className?: string;
+  tone?: "accent" | "warn" | "risk" | "ok";
+  title?: string;
+  action?: ReactNode;
+}) => {
+  const toneStyles = {
+    accent: "border-accent bg-accent-soft text-accent-text",
+    warn: "border-warn bg-warn-soft text-warn-text",
+    risk: "border-risk bg-risk-soft text-risk-text",
+    ok: "border-ok bg-ok-soft text-ok-text",
+  }[tone];
+
+  return (
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-between gap-4 rounded-panel border-l-2 px-5 py-4",
+        toneStyles,
+        className,
+      )}
+    >
+      <div className="min-w-0 max-w-measure flex-1 text-label leading-6">
+        {title ? <p className="mb-0.5 font-semibold">{title}</p> : null}
+        <div>{children}</div>
+      </div>
+      {action ? <div className="shrink-0">{action}</div> : null}
+    </div>
+  );
+};
+
+/** Canvas-level filter and control toolbar. Replaces bulky boxed filter forms. */
+export const FilterBar = ({
+  children,
+  action,
+  className,
+}: {
+  children: ReactNode;
+  action?: ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={cn(
+      "flex flex-wrap items-end justify-between gap-4 border-y border-subtle py-3.5",
+      className,
+    )}
+  >
+    <div className="flex flex-1 flex-wrap items-end gap-3">{children}</div>
+    {action ? <div className="shrink-0">{action}</div> : null}
+  </div>
 );

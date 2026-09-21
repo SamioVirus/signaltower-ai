@@ -35,10 +35,26 @@ export default {
           text: token("accent-text"),
         },
         "on-accent": token("on-accent"),
-        ok: { DEFAULT: token("ok"), soft: token("ok-soft"), text: token("ok-text") },
-        warn: { DEFAULT: token("warn"), soft: token("warn-soft"), text: token("warn-text") },
-        risk: { DEFAULT: token("risk"), soft: token("risk-soft"), text: token("risk-text") },
-        info: { DEFAULT: token("info"), soft: token("info-soft"), text: token("info-text") },
+        ok: {
+          DEFAULT: token("ok"),
+          soft: token("ok-soft"),
+          text: token("ok-text"),
+        },
+        warn: {
+          DEFAULT: token("warn"),
+          soft: token("warn-soft"),
+          text: token("warn-text"),
+        },
+        risk: {
+          DEFAULT: token("risk"),
+          soft: token("risk-soft"),
+          text: token("risk-text"),
+        },
+        info: {
+          DEFAULT: token("info"),
+          soft: token("info-soft"),
+          text: token("info-text"),
+        },
         neutral: {
           DEFAULT: token("neutral"),
           soft: token("neutral-soft"),
@@ -73,9 +89,15 @@ export default {
         "2xs": ["0.75rem", { lineHeight: "1rem" }],
         label: ["0.8125rem", { lineHeight: "1.125rem" }],
         /** Editorial display sizes, landing page only. */
-        "display-sm": ["2.25rem", { lineHeight: "1.1", letterSpacing: "-0.015em" }],
+        "display-sm": [
+          "2.25rem",
+          { lineHeight: "1.1", letterSpacing: "-0.015em" },
+        ],
         display: ["3.5rem", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
-        "display-lg": ["4rem", { lineHeight: "1.02", letterSpacing: "-0.022em" }],
+        "display-lg": [
+          "4rem",
+          { lineHeight: "1.02", letterSpacing: "-0.022em" },
+        ],
       },
       borderRadius: {
         control: "6px",

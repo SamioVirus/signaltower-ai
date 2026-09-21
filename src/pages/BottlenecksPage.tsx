@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
 
 import { ChartFrame } from "@/components/domain/chart";
@@ -8,7 +9,13 @@ import {
   useChartTooltip,
 } from "@/lib/chart-theme";
 import { Page, PageHeader } from "@/components/ui/PageHeader";
-import { Badge, Card, CardBody, CardHeader } from "@/components/ui/Primitives";
+import {
+  Badge,
+  Callout,
+  Panel,
+  PanelBody,
+  PanelHeader,
+} from "@/components/ui/Primitives";
 import { portfolio } from "@/data/portfolio";
 import { blockerPatterns } from "@/engine/blockers";
 import {
@@ -26,7 +33,7 @@ const heatTone = (count: number, max: number): string => {
     return "border-transparent bg-[var(--ordinal-4)] text-white";
   if (intensity > 0.33)
     return "border-transparent bg-[var(--ordinal-3)] text-white";
-  return "border-transparent bg-[var(--ordinal-1)] text-slate-900";
+  return "border-transparent bg-[var(--ordinal-1)] text-[#14191B]";
 };
 
 export const BottlenecksPage = () => {
@@ -60,34 +67,29 @@ export const BottlenecksPage = () => {
       />
 
       {systemic.length > 0 ? (
-        <Card className="border-accent-border bg-accent-soft">
-          <CardBody>
-            <p className="text-sm font-semibold text-accent-text">
-              {formatCount(systemic.length, "systemic bottleneck")} detected
-            </p>
-            <p className="mt-1.5 max-w-4xl text-sm leading-6 text-accent-text">
-              A control counts as systemic once it is blocking three or more
-              initiatives at their next gate simultaneously. That is the signal
-              to build the control pattern once —{" "}
-              {systemic
-                .map(
-                  (pattern) =>
-                    `${pattern.control.label.toLowerCase()} (${pattern.blockingNowCount} blocked now, ${formatCompactCurrency(pattern.valueTrappedUsd)} behind it)`,
-                )
-                .join("; ")}
-              .
-            </p>
-          </CardBody>
-        </Card>
+        <Callout
+          title={`${formatCount(systemic.length, "systemic bottleneck")} detected`}
+        >
+          A control counts as systemic once it is blocking three or more
+          initiatives at their next gate simultaneously. That is the signal to
+          build the control pattern once —{" "}
+          {systemic
+            .map(
+              (pattern) =>
+                `${pattern.control.label.toLowerCase()} (${pattern.blockingNowCount} blocked now, ${formatCompactCurrency(pattern.valueTrappedUsd)} behind it)`,
+            )
+            .join("; ")}
+          .
+        </Callout>
       ) : null}
 
       <section className="grid gap-5 xl:grid-cols-2">
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Value behind each control"
             description="Annual value of every initiative still needing this control before production."
           />
-          <CardBody>
+          <PanelBody>
             <ChartFrame height={300}>
               <BarChart
                 data={chartData}
@@ -129,20 +131,20 @@ export const BottlenecksPage = () => {
                 />
               </BarChart>
             </ChartFrame>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
 
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Control patterns"
             description={`${formatCompactCurrency(totalTrapped)} of annual value is waiting on control evidence somewhere in the portfolio.`}
           />
-          <CardBody>
-            <ul className="space-y-3">
+          <PanelBody>
+            <ul className="divide-y divide-subtle">
               {patterns.slice(0, 8).map((pattern) => (
                 <li
                   key={pattern.controlId}
-                  className="border-b border-subtle pb-3 last:border-0 last:pb-0"
+                  className="py-3 first:pt-0 last:pb-0"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="flex items-center gap-2">
@@ -171,17 +173,17 @@ export const BottlenecksPage = () => {
                 </li>
               ))}
             </ul>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[1.4fr_1fr]">
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Stage ageing"
             description="Rows are stages, columns are how long initiatives have been sitting there."
           />
-          <CardBody>
+          <PanelBody>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[520px] text-left text-sm">
                 <caption className="sr-only">
@@ -225,7 +227,7 @@ export const BottlenecksPage = () => {
                                 : "No initiatives in this cell"
                             }
                             className={cn(
-                              "block rounded-lg border py-2.5 text-center text-sm font-semibold",
+                              "block rounded-control border py-2 text-center text-sm font-semibold",
                               heatTone(cell.count, maxCell),
                             )}
                           >
@@ -238,20 +240,20 @@ export const BottlenecksPage = () => {
                 </tbody>
               </table>
             </div>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
 
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Control queue load"
             description="Which review function is actually the constraint."
           />
-          <CardBody>
-            <ul className="space-y-3">
+          <PanelBody>
+            <ul className="divide-y divide-subtle">
               {queue.map((entry) => (
                 <li
                   key={entry.owningFunction}
-                  className="rounded-lg border border-subtle bg-surface-sunken p-3"
+                  className="py-3 first:pt-0 last:pb-0"
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <span className="text-sm font-medium text-primary">
@@ -259,7 +261,7 @@ export const BottlenecksPage = () => {
                     </span>
                     <span
                       data-metric
-                      className="text-lg font-semibold text-primary"
+                      className="text-base font-semibold text-primary"
                     >
                       {entry.totalEffortDays}
                       <span className="ml-1 text-2xs font-normal text-muted">
@@ -276,25 +278,24 @@ export const BottlenecksPage = () => {
                 </li>
               ))}
             </ul>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
       </section>
 
-      <Card>
-        <CardBody className="flex flex-wrap items-center justify-between gap-4">
-          <p className="max-w-3xl text-sm leading-6 text-secondary">
-            Bottlenecks are a sequencing problem before they are a capacity
-            problem. The decision queue ranks the same evidence by what each
-            unit of control effort would actually buy.
-          </p>
-          <Link
-            to="/decisions"
-            className="shrink-0 rounded-lg bg-accent-solid px-4 py-2 text-sm font-semibold text-on-accent transition hover:bg-accent-solid-hover"
-          >
-            See the ranked decisions
-          </Link>
-        </CardBody>
-      </Card>
+      <section className="flex flex-wrap items-center justify-between gap-4 border-t border-subtle pt-6">
+        <p className="max-w-measure text-sm leading-6 text-secondary">
+          Bottlenecks are a sequencing problem before they are a capacity
+          problem. The decision queue ranks the same evidence by what each unit
+          of control effort would actually buy.
+        </p>
+        <Link
+          to="/decisions"
+          className="inline-flex h-9 items-center gap-2 rounded-control bg-accent-solid px-4 text-label font-medium text-on-accent transition-colors hover:bg-accent-solid-hover"
+        >
+          See the ranked decisions
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+        </Link>
+      </section>
     </Page>
   );
 };

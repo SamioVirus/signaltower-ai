@@ -102,16 +102,16 @@ place where business rules accumulate.
 
 ### Verification
 
-| Check           | Result                                                                             |
-| --------------- | ---------------------------------------------------------------------------------- |
-| Unit tests      | **307 passing**                                                                    |
+| Check           | Result                                                                                           |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| Unit tests      | **307 passing**                                                                                  |
 | Engine coverage | **98.8% statements · 89.5% branches · 100% functions · 99.5% lines** (thresholds enforced in CI) |
-| End-to-end      | **56 passing** across desktop and mobile viewports                                 |
-| Accessibility   | **0 violations** — axe-core, WCAG 2.1 AA, all 9 routes in both themes              |
-| Types           | `strict`, `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`             |
-| Lint            | ESLint clean, including `jsx-a11y`                                                 |
-| Dependencies    | **0 npm vulnerabilities**                                                          |
-| Initial JS      | **293 kB (92 kB gzip)** — charts load on demand                                    |
+| End-to-end      | **56 passing** across desktop and mobile viewports                                               |
+| Accessibility   | **0 violations** — axe-core, WCAG 2.1 AA, all 9 routes in both themes                            |
+| Types           | `strict`, `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`                           |
+| Lint            | ESLint clean, including `jsx-a11y`                                                               |
+| Dependencies    | **0 npm vulnerabilities**                                                                        |
+| Initial JS      | **293 kB (92 kB gzip)** — charts load on demand                                                  |
 
 Tests are built from an explicit factory rather than the shipped fixture, so they assert engine
 behaviour instead of demo content. A separate [fixture-integrity suite](src/data/__tests__/fixture.test.ts)

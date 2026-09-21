@@ -11,7 +11,12 @@ import {
 import { GateLadder } from "@/components/domain/GateLadder";
 import { ScoreExplainer } from "@/components/domain/ScoreExplainer";
 import { Page, PageHeader } from "@/components/ui/PageHeader";
-import { Card, CardBody, CardHeader, Mono } from "@/components/ui/Primitives";
+import {
+  Mono,
+  Panel,
+  PanelBody,
+  PanelHeader,
+} from "@/components/ui/Primitives";
 import { portfolio } from "@/data/portfolio";
 import { deriveBlockers, deriveGaps } from "@/engine/blockers";
 import { controlDebt, nextGate } from "@/engine/gates";
@@ -73,30 +78,30 @@ export const InitiativePage = () => {
       </PageHeader>
 
       <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Gate ladder"
             description="A control gated at a stage must be approved before the initiative may enter it."
           />
-          <CardBody>
+          <PanelBody>
             <GateLadder initiative={initiative} />
 
             {debt.length > 0 ? (
-              <p className="mt-4 rounded-lg border border-warn/30 bg-warn-soft p-3 text-xs leading-5 text-warn-text">
+              <div className="mt-5 border-l-2 border-warn bg-warn-soft/70 px-3.5 py-2 text-xs leading-5 text-warn-text">
                 <span className="font-semibold">Control debt.</span> This
                 initiative is sitting in {initiative.stage}, a stage that
                 required{" "}
                 {debt.map((control) => control.label.toLowerCase()).join(", ")}.
                 That evidence was never approved, so the stage field overstates
                 where it really is.
-              </p>
+              </div>
             ) : null}
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
 
         <div className="space-y-5">
-          <Card>
-            <CardBody className="space-y-4">
+          <Panel as="aside">
+            <PanelBody className="space-y-4">
               <ReadinessMeter
                 score={readiness.score}
                 band={readiness.band}
@@ -129,12 +134,12 @@ export const InitiativePage = () => {
                   value={formatPercent(initiative.data.qualityScore)}
                 />
               </dl>
-            </CardBody>
-          </Card>
+            </PanelBody>
+          </Panel>
 
-          <Card>
-            <CardHeader title="Accountability" />
-            <CardBody>
+          <Panel as="aside">
+            <PanelHeader title="Accountability" />
+            <PanelBody>
               <dl className="space-y-2.5 text-sm">
                 <Row label="Executive sponsor" value={initiative.sponsor} />
                 <Row label="Product owner" value={initiative.productOwner} />
@@ -142,28 +147,28 @@ export const InitiativePage = () => {
                 <Row label="Delivery team" value={initiative.deliveryTeam} />
                 <Row label="Intended users" value={initiative.intendedUsers} />
               </dl>
-            </CardBody>
-          </Card>
+            </PanelBody>
+          </Panel>
         </div>
       </section>
 
-      <Card>
-        <CardHeader
+      <Panel as="section">
+        <PanelHeader
           title="How this score was produced"
           description={`Weighted control credit under policy ${DEFAULT_POLICY.version}. Weights vary by risk tier; inapplicable controls are removed from the denominator.`}
         />
-        <CardBody>
+        <PanelBody>
           <ScoreExplainer initiative={initiative} readiness={readiness} />
-        </CardBody>
-      </Card>
+        </PanelBody>
+      </Panel>
 
       <section className="grid gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader
+        <Panel as="article">
+          <PanelHeader
             title="Control evidence"
             description="What exists today, and who owns it."
           />
-          <CardBody>
+          <PanelBody>
             <ul className="space-y-3">
               {DEFAULT_POLICY.controls.map((control) => {
                 const artifact = initiative.evidence[control.id];
@@ -196,13 +201,13 @@ export const InitiativePage = () => {
                 );
               })}
             </ul>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
 
         <div className="space-y-5">
-          <Card>
-            <CardHeader title="Business case" />
-            <CardBody>
+          <Panel as="article">
+            <PanelHeader title="Business case" />
+            <PanelBody>
               <dl className="space-y-2.5 text-sm">
                 <Row label="Target KPI" value={initiative.kpi.metric} />
                 <Row
@@ -223,19 +228,19 @@ export const InitiativePage = () => {
                   {initiative.postLaunchMetrics.map((metric) => (
                     <li
                       key={metric}
-                      className="rounded-md bg-surface-sunken px-2 py-1 text-xs text-secondary ring-1 ring-subtle"
+                      className="rounded bg-surface-sunken px-2 py-0.5 text-xs text-secondary ring-1 ring-subtle"
                     >
                       {metric}
                     </li>
                   ))}
                 </ul>
               </div>
-            </CardBody>
-          </Card>
+            </PanelBody>
+          </Panel>
 
-          <Card>
-            <CardHeader title="Data and model" />
-            <CardBody>
+          <Panel as="article">
+            <PanelHeader title="Data and model" />
+            <PanelBody>
               <dl className="space-y-2.5 text-sm">
                 <Row label="Model type" value={initiative.model.type} />
                 <Row
@@ -267,15 +272,15 @@ export const InitiativePage = () => {
                   {initiative.data.sources.map((source) => (
                     <li
                       key={source}
-                      className="rounded-md bg-surface-sunken px-2 py-1 text-xs text-secondary ring-1 ring-subtle"
+                      className="rounded bg-surface-sunken px-2 py-0.5 text-xs text-secondary ring-1 ring-subtle"
                     >
                       {source}
                     </li>
                   ))}
                 </ul>
               </div>
-            </CardBody>
-          </Card>
+            </PanelBody>
+          </Panel>
         </div>
       </section>
 
