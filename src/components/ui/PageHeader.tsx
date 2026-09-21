@@ -23,10 +23,10 @@ export const PageHeader = ({
   <header className="mb-8">
     <div className="flex flex-wrap items-start justify-between gap-5">
       <div className="max-w-measure">
-        <p className="text-2xs font-medium uppercase tracking-[0.12em] text-accent-text">
-          {eyebrow}
+        <p className="font-mono text-2xs font-semibold uppercase tracking-[0.16em] text-accent-text">
+          [{eyebrow}]
         </p>
-        <h1 className="mt-2 text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-primary sm:text-[2rem]">
+        <h1 className="mt-2 font-display text-2xl font-medium tracking-tight text-primary sm:text-3xl lg:text-4xl">
           {title}
         </h1>
         <p className="mt-3 text-[0.9375rem] leading-6 text-secondary">{lede}</p>
