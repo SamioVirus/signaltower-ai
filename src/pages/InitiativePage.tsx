@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, CircleDot, X } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import {
   BandBadge,
@@ -8,16 +8,15 @@ import {
   RiskBadge,
   StageBadge,
 } from "@/components/domain/Indicators";
+import { GateLadder } from "@/components/domain/GateLadder";
 import { ScoreExplainer } from "@/components/domain/ScoreExplainer";
 import { Page, PageHeader } from "@/components/ui/PageHeader";
 import { Card, CardBody, CardHeader, Mono } from "@/components/ui/Primitives";
 import { portfolio } from "@/data/portfolio";
 import { deriveBlockers, deriveGaps } from "@/engine/blockers";
-import { controlDebt, evaluateGate, nextGate } from "@/engine/gates";
-import { DEFAULT_POLICY, stageIndex } from "@/engine/policy";
+import { controlDebt, nextGate } from "@/engine/gates";
+import { DEFAULT_POLICY } from "@/engine/policy";
 import { scoreInitiative } from "@/engine/readiness";
-import { STAGES } from "@/engine/types";
-import { cn } from "@/lib/cn";
 import { formatCompactCurrency, formatDays, formatPercent } from "@/lib/format";
 
 /**
@@ -46,7 +45,6 @@ export const InitiativePage = () => {
     (total, gap) => total + gap.effortDays,
     0,
   );
-  const currentStageIndex = stageIndex(initiative.stage);
 
   return (
     <Page>
@@ -81,62 +79,7 @@ export const InitiativePage = () => {
             description="A control gated at a stage must be approved before the initiative may enter it."
           />
           <CardBody>
-            <ol className="space-y-2">
-              {STAGES.map((stage, stageIdx) => {
-                const verdict = evaluateGate(initiative, stage);
-                const isCurrent = stage === initiative.stage;
-                const isPast = stageIdx <= currentStageIndex;
-                const Icon = verdict.passed ? Check : isPast ? X : CircleDot;
-
-                return (
-                  <li
-                    key={stage}
-                    className={cn(
-                      "flex flex-wrap items-center gap-3 rounded-lg border px-3 py-2.5",
-                      isCurrent
-                        ? "border-accent-border bg-accent-soft"
-                        : "border-subtle bg-surface-sunken",
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "grid h-6 w-6 shrink-0 place-items-center rounded-full",
-                        verdict.passed
-                          ? "bg-ok text-white"
-                          : isPast
-                            ? "bg-risk text-white"
-                            : "bg-surface text-muted ring-1 ring-subtle",
-                      )}
-                      aria-hidden="true"
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
-
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium text-primary">
-                        {stage}
-                        {isCurrent ? (
-                          <span className="ml-2 text-2xs font-semibold uppercase tracking-wider text-accent-text">
-                            Current
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="block text-xs text-muted">
-                        {verdict.required.length === 0
-                          ? "No controls required at this gate"
-                          : verdict.passed
-                            ? `All ${verdict.required.length} required controls approved`
-                            : `${verdict.blocking.length} of ${verdict.required.length} required controls outstanding: ${verdict.blocking
-                                .map((control) =>
-                                  control.shortLabel.toLowerCase(),
-                                )
-                                .join(", ")}`}
-                      </span>
-                    </span>
-                  </li>
-                );
-              })}
-            </ol>
+            <GateLadder initiative={initiative} />
 
             {debt.length > 0 ? (
               <p className="mt-4 rounded-lg border border-warn/30 bg-warn-soft p-3 text-xs leading-5 text-warn-text">

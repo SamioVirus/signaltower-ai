@@ -42,7 +42,9 @@ const SHOTS: Shot[] = [
     name: "05-score-explainer",
     path: "/initiatives/AI-001",
     prepare: async (page) => {
-      await page.getByText("How this score was produced").scrollIntoViewIfNeeded();
+      await page
+        .getByText("How this score was produced")
+        .scrollIntoViewIfNeeded();
       await page.waitForTimeout(150);
     },
   },
@@ -52,7 +54,9 @@ const SHOTS: Shot[] = [
     name: "08-simulator",
     path: "/simulator",
     prepare: async (page) => {
-      await page.getByRole("button", { name: /Apply top 3 decisions/i }).click();
+      await page
+        .getByRole("button", { name: /Apply top 3 decisions/i })
+        .click();
       await page.waitForTimeout(400);
     },
   },
@@ -79,7 +83,10 @@ const startPreview = () => {
   return child;
 };
 
-const waitForServer = async (url: string, timeoutMs = 60_000): Promise<void> => {
+const waitForServer = async (
+  url: string,
+  timeoutMs = 60_000,
+): Promise<void> => {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     try {
@@ -99,7 +106,11 @@ const setTheme = async (page: Page, theme: "light" | "dark"): Promise<void> => {
   }, theme);
 };
 
-const capture = async (browser: Browser, shot: Shot, theme: "light" | "dark"): Promise<void> => {
+const capture = async (
+  browser: Browser,
+  shot: Shot,
+  theme: "light" | "dark",
+): Promise<void> => {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 900 },
     deviceScaleFactor: 2,

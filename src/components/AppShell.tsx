@@ -1,32 +1,26 @@
 import { Suspense, useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { Command, Menu, Monitor, Moon, Sun, X } from "lucide-react";
+import { Menu, Monitor, Moon, Search, Sun, X } from "lucide-react";
 
+import { Wordmark } from "@/components/Brand";
 import { CommandPalette } from "@/components/CommandPalette";
 import { NAV_ITEMS } from "@/components/navigation";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/cn";
 
-const Wordmark = () => (
-  <span className="flex items-center gap-2.5">
-    <span
-      className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent-solid text-xs font-bold text-on-accent"
-      aria-hidden="true"
-    >
-      ST
-    </span>
-    <span className="min-w-0">
-      <span className="block truncate text-sm font-semibold tracking-tight text-primary">
-        SignalTower
-      </span>
-      <span className="block truncate text-2xs text-muted">
-        Enterprise AI control tower
-      </span>
-    </span>
-  </span>
-);
+/**
+ * Application shell.
+ *
+ * A graphite rail anchors the page and gives the warm canvas something to sit
+ * against. Navigation is the one place the interface is allowed to be dark in
+ * light mode — it is furniture, not content.
+ */
 
-const ThemeToggle = () => {
+const ThemeToggle = ({
+  tone = "default",
+}: {
+  tone?: "default" | "inverted";
+}) => {
   const { preference, cycle } = useTheme();
   const Icon =
     preference === "light" ? Sun : preference === "dark" ? Moon : Monitor;
@@ -43,14 +37,25 @@ const ThemeToggle = () => {
       onClick={cycle}
       title={`Theme: ${preference}. Switch to ${next}.`}
       aria-label={`Theme: ${preference}. Switch to ${next}.`}
-      className="grid h-9 w-9 place-items-center rounded-lg border border-subtle bg-surface text-secondary transition hover:bg-surface-sunken hover:text-primary"
+      className={cn(
+        "grid h-8 w-8 place-items-center rounded-control transition-colors duration-150",
+        tone === "inverted"
+          ? "text-white/70 hover:bg-white/10 hover:text-white"
+          : "border border-subtle bg-surface text-secondary hover:bg-surface-sunken hover:text-primary",
+      )}
     >
       <Icon className="h-4 w-4" aria-hidden="true" />
     </button>
   );
 };
 
-const NavList = ({ onNavigate }: { onNavigate?: () => void }) => (
+const NavList = ({
+  onNavigate,
+  tone = "inverted",
+}: {
+  onNavigate?: () => void;
+  tone?: "default" | "inverted";
+}) => (
   <ul className="space-y-0.5">
     {NAV_ITEMS.map((item) => (
       <li key={item.to}>
@@ -59,20 +64,29 @@ const NavList = ({ onNavigate }: { onNavigate?: () => void }) => (
           onClick={onNavigate}
           className={({ isActive }) =>
             cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
-              isActive
-                ? "bg-accent-soft text-accent-text"
-                : "text-secondary hover:bg-surface-sunken hover:text-primary",
+              "relative flex items-center gap-2.5 rounded-control py-2 pl-3.5 pr-3 text-label font-medium",
+              "transition-colors duration-150",
+              tone === "inverted"
+                ? isActive
+                  ? "bg-white/[0.08] text-white"
+                  : "text-white/65 hover:bg-white/[0.05] hover:text-white/90"
+                : isActive
+                  ? "bg-accent-soft text-accent-text"
+                  : "text-secondary hover:bg-surface-sunken hover:text-primary",
             )
           }
         >
           {({ isActive }) => (
             <>
+              {/* The signal marker: a short accent stroke on the selected item. */}
+              {isActive ? (
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r bg-accent"
+                />
+              ) : null}
               <item.icon
-                className={cn(
-                  "h-4 w-4 shrink-0",
-                  isActive ? "text-accent" : "text-muted",
-                )}
+                className="h-4 w-4 shrink-0 opacity-80"
                 aria-hidden="true"
               />
               <span className="truncate">{item.label}</span>
@@ -84,10 +98,21 @@ const NavList = ({ onNavigate }: { onNavigate?: () => void }) => (
   </ul>
 );
 
-const SyntheticNotice = () => (
-  <p className="rounded-lg border border-subtle bg-surface-sunken p-3 text-2xs leading-5 text-muted">
-    <span className="font-semibold text-secondary">Synthetic data.</span> No
-    real institution, system or person. No backend, authentication or tracking.
+const SyntheticNotice = ({
+  tone = "inverted",
+}: {
+  tone?: "default" | "inverted";
+}) => (
+  <p
+    className={cn(
+      "text-2xs leading-5",
+      tone === "inverted" ? "text-white/60" : "text-muted",
+    )}
+  >
+    <span className={tone === "inverted" ? "text-white/65" : "text-secondary"}>
+      Synthetic data.
+    </span>{" "}
+    No real institution, system or person. No backend or tracking.
   </p>
 );
 
@@ -113,45 +138,45 @@ export const AppShell = () => {
         Skip to content
       </a>
 
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-subtle bg-surface px-3 py-4 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col bg-graphite px-3 py-5 lg:flex">
         <NavLink
           to="/"
-          className="rounded-lg px-2 py-1.5 transition hover:bg-surface-sunken"
+          className="rounded-control px-2 py-1 transition-colors duration-150 hover:bg-white/[0.05]"
         >
-          <Wordmark />
+          <Wordmark tone="inverted" />
         </NavLink>
 
-        <nav aria-label="Primary" className="mt-6 flex-1">
+        <nav aria-label="Primary" className="mt-7 flex-1">
           <NavList />
         </nav>
 
-        <div className="space-y-3">
+        <div className="space-y-4 px-1">
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
-            className="flex w-full items-center gap-2 rounded-lg border border-subtle bg-surface-sunken px-3 py-2 text-xs text-muted transition hover:border-strong hover:text-secondary"
+            className="flex w-full items-center gap-2 rounded-control border border-white/10 px-2.5 py-1.5 text-2xs text-white/60 transition-colors duration-150 hover:border-white/20 hover:text-white/75"
           >
-            <Command className="h-3.5 w-3.5" aria-hidden="true" />
+            <Search className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="flex-1 text-left">Search</span>
-            <kbd className="font-mono text-2xs">⌘K</kbd>
+            <kbd className="font-mono">⌘K</kbd>
           </button>
           <SyntheticNotice />
         </div>
       </aside>
 
       {/* Mobile header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-subtle bg-surface/95 px-4 py-3 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 bg-graphite px-4 py-2.5 lg:hidden">
         <NavLink to="/">
-          <Wordmark />
+          <Wordmark tone="inverted" showDescriptor={false} />
         </NavLink>
-        <div className="flex items-center gap-2">
-          <ThemeToggle />
+        <div className="flex items-center gap-1">
+          <ThemeToggle tone="inverted" />
           <button
             type="button"
             onClick={() => setMobileNavOpen((open) => !open)}
             aria-expanded={mobileNavOpen}
             aria-label={mobileNavOpen ? "Close navigation" : "Open navigation"}
-            className="grid h-9 w-9 place-items-center rounded-lg border border-subtle bg-surface text-secondary"
+            className="grid h-8 w-8 place-items-center rounded-control text-white/65 transition-colors duration-150 hover:bg-white/10 hover:text-white"
           >
             {mobileNavOpen ? (
               <X className="h-4 w-4" aria-hidden="true" />
@@ -165,37 +190,34 @@ export const AppShell = () => {
       {mobileNavOpen ? (
         <nav
           aria-label="Primary"
-          className="sticky top-[57px] z-20 border-b border-subtle bg-surface p-3 lg:hidden"
+          className="sticky top-[49px] z-20 bg-graphite px-3 pb-4 lg:hidden"
         >
           <NavList onNavigate={() => setMobileNavOpen(false)} />
-          <div className="mt-3">
+          <div className="mt-4 px-1">
             <SyntheticNotice />
           </div>
         </nav>
       ) : null}
 
-      <div className="lg:pl-64">
-        {/* Desktop top bar: theme control lives here, away from the nav list. */}
-        <div className="sticky top-0 z-20 hidden justify-end border-b border-subtle bg-canvas/80 px-6 py-2.5 backdrop-blur lg:flex">
+      <div className="lg:pl-60">
+        <div className="sticky top-0 z-20 hidden justify-end border-b border-subtle bg-canvas/85 px-8 py-2 backdrop-blur lg:flex">
           <ThemeToggle />
         </div>
 
         <main
           id="main"
-          className="mx-auto max-w-content px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
+          className="mx-auto max-w-content px-4 py-6 sm:px-6 lg:px-8 lg:py-10"
         >
           {/*
             Routes are code-split, so the content area suspends on navigation
-            while the shell around it stays mounted. The fallback is
-            deliberately quiet: chunks resolve in well under a second, and a
-            skeleton that flashes briefly reads worse than a status line.
+            while the shell around it stays mounted.
           */}
           <Suspense
             fallback={
               <p
                 role="status"
                 aria-live="polite"
-                className="py-8 text-sm text-muted"
+                className="py-8 text-label text-muted"
               >
                 Loading…
               </p>
@@ -205,10 +227,11 @@ export const AppShell = () => {
           </Suspense>
         </main>
 
-        <footer className="mx-auto max-w-content px-4 pb-10 pt-4 sm:px-6 lg:px-8">
-          <p className="border-t border-subtle pt-5 text-xs text-muted">
-            SignalTower AI — a synthetic portfolio demonstration. Every figure
-            shown is derived from the evidence fixture by the engine in{" "}
+        <footer className="mx-auto max-w-content px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+          <div className="signal-rule" aria-hidden="true" />
+          <p className="mt-4 max-w-measure text-2xs leading-5 text-muted">
+            A synthetic portfolio demonstration. Every figure is derived from
+            the evidence fixture by the engine in{" "}
             <code className="font-mono">src/engine</code>, under the policy
             documented on the{" "}
             <NavLink

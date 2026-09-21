@@ -1,13 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  AlertTriangle,
-  Banknote,
-  CheckCircle2,
-  Clock3,
-  Download,
-  Layers,
-  ScrollText,
-} from "lucide-react";
+import { Download } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -19,7 +11,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { Stat } from "@/components/domain/Indicators";
+import { Stat, StatStrip } from "@/components/domain/Indicators";
 import { InitiativeTable } from "@/components/domain/InitiativeTable";
 import {
   Button,
@@ -98,76 +90,65 @@ export const PortfolioPage = () => {
         }
       />
 
-      <section
-        aria-label="Portfolio indicators"
-        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6"
-      >
+      <StatStrip>
         <Stat
           label="Initiatives"
           value={`${metrics.totalInitiatives}`}
           detail="Intake through monitoring"
-          icon={<Layers className="h-4 w-4" />}
         />
         <Stat
           label="Value at stake"
           value={formatCompactCurrency(metrics.totalValueUsd)}
           detail="Annual, as estimated by sponsors"
-          icon={<Banknote className="h-4 w-4" />}
         />
         <Stat
           label="Production ready"
           value={`${metrics.productionReadyCount}`}
           detail={`${metrics.liveCount} already live`}
           tone="ok"
-          icon={<CheckCircle2 className="h-4 w-4" />}
         />
         <Stat
           label="Blocked now"
           value={`${metrics.blockedCount}`}
           detail={`${formatCompactCurrency(metrics.blockedValueUsd)} behind the next gate`}
           tone="risk"
-          icon={<AlertTriangle className="h-4 w-4" />}
         />
         <Stat
           label="Control debt"
           value={`${metrics.controlDebtCount}`}
           detail="In a stage they never qualified for"
           tone="warn"
-          icon={<ScrollText className="h-4 w-4" />}
         />
         <Stat
           label="Average stage age"
           value={formatDays(metrics.averageStageAgeDays)}
           detail="Time sitting in the current stage"
-          icon={<Clock3 className="h-4 w-4" />}
         />
-      </section>
+      </StatStrip>
 
       {/* The one sentence a leader should leave with. */}
       {worstPattern ? (
-        <Card className="border-accent-border bg-accent-soft">
-          <CardBody className="flex flex-wrap items-center justify-between gap-4">
-            <p className="max-w-3xl text-sm leading-6 text-accent-text">
-              <span className="font-semibold">
-                Readiness is {formatPercent(metrics.averageReadiness)} on
-                average, but {formatPercent(metrics.valueWeightedReadiness)}{" "}
-                once weighted by value.
-              </span>{" "}
-              The larger bets are the less ready ones. The single widest gap is{" "}
-              <span className="font-semibold">
-                {worstPattern.control.label.toLowerCase()}
-              </span>
-              , outstanding on {formatCount(worstPattern.count, "initiative")}{" "}
-              and blocking {worstPattern.blockingNowCount} of them right now.
-            </p>
-            <Link
-              to="/bottlenecks"
-              className="shrink-0 rounded-lg bg-accent-solid px-3.5 py-2 text-sm font-semibold text-on-accent transition hover:bg-accent-solid-hover"
-            >
-              See where value is trapped
-            </Link>
-          </CardBody>
-        </Card>
+        <div className="flex flex-wrap items-center justify-between gap-5 rounded-panel border-l-2 border-accent bg-accent-soft px-5 py-4">
+          <p className="max-w-measure text-label leading-6 text-accent-text">
+            <span className="font-semibold">
+              Readiness is {formatPercent(metrics.averageReadiness)} on average,
+              but {formatPercent(metrics.valueWeightedReadiness)} once weighted
+              by value.
+            </span>{" "}
+            The larger bets are the less ready ones. The single widest gap is{" "}
+            <span className="font-semibold">
+              {worstPattern.control.label.toLowerCase()}
+            </span>
+            , outstanding on {formatCount(worstPattern.count, "initiative")} and
+            blocking {worstPattern.blockingNowCount} of them right now.
+          </p>
+          <Link
+            to="/bottlenecks"
+            className="shrink-0 rounded-lg bg-accent-solid px-3.5 py-2 text-sm font-semibold text-on-accent transition hover:bg-accent-solid-hover"
+          >
+            See where value is trapped
+          </Link>
+        </div>
       ) : null}
 
       <section className="grid gap-5 xl:grid-cols-3">

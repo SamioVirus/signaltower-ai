@@ -46,7 +46,9 @@ const main = async () => {
         console.log(`${violation.id} (${violation.nodes.length})`);
         for (const node of violation.nodes.slice(0, 6)) {
           console.log(`  ${node.target.join(" ")}`);
-          console.log(`    ${node.failureSummary?.split("\n").slice(1).join(" | ")}`);
+          console.log(
+            `    ${node.failureSummary?.split("\n").slice(1).join(" | ")}`,
+          );
           console.log(`    html: ${node.html.slice(0, 140)}`);
         }
       }

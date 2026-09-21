@@ -3,144 +3,162 @@
 @tailwind utilities;
 
 /**
- * Design tokens.
+ * SignalTower design tokens.
  *
- * Every colour in the application resolves through one of these semantic
- * names, so the dark theme is a token swap rather than a second set of
- * hand-tuned classes scattered through the components. Values are stored as
- * space-separated RGB channels so Tailwind's opacity modifiers keep working
- * (`bg-surface/60`).
+ * Warm-light-first: an ivory canvas, ink text, a graphite navigation anchor and
+ * a single petrol accent that means interaction. Dark mode is a selected
+ * counterpart, not an inversion — the accent in particular needs two steps,
+ * because a colour light enough to read as text on charcoal is too light to sit
+ * behind white button labels.
+ *
+ * Every pairing below is contrast-tested by `npm run palette`, which runs in
+ * verification. Change a value there and the gate tells you what it broke.
  */
 
 @layer base {
   :root {
     color-scheme: light;
 
-    --canvas: 246 247 250;
-    --surface: 255 255 255;
-    --surface-raised: 255 255 255;
-    --surface-sunken: 248 250 252;
+    /* Surfaces */
+    --canvas: 246 244 239;
+    --surface: 255 254 251;
+    --surface-raised: 255 254 251;
+    --surface-sunken: 239 237 230;
 
-    --border-subtle: 226 232 240;
-    --border-strong: 203 213 225;
+    /* Structure */
+    --border-subtle: 218 223 217;
+    --border-strong: 195 202 191;
 
-    --text-primary: 15 23 42;
-    --text-secondary: 51 65 85;
-    /* Clears 4.5:1 against every light surface, including accent-soft. */
-    --text-muted: 71 85 105;
-    --text-inverted: 248 250 252;
+    /* Text */
+    --text-primary: 32 39 43;
+    --text-secondary: 74 84 90;
+    --text-muted: 95 107 114;
+    --text-inverted: 246 244 239;
 
-    --accent: 79 70 229;
-    --accent-hover: 67 56 202;
-    /* Filled controls carry their own pair so white text always clears AA. */
-    --accent-solid: 79 70 229;
-    --accent-solid-hover: 67 56 202;
+    /* Navigation anchor */
+    --graphite: 32 44 49;
+
+    /* Interaction */
+    --accent: 29 98 112;
+    --accent-hover: 22 78 90;
+    --accent-solid: 29 98 112;
+    --accent-solid-hover: 22 78 90;
     --on-accent: 255 255 255;
-    --accent-soft: 238 242 255;
-    --accent-border: 199 210 254;
-    --accent-text: 55 48 163;
+    --accent-soft: 228 238 240;
+    --accent-border: 185 211 216;
+    --accent-text: 21 72 83;
 
-    /* Evidence states. Each has a soft background and a readable foreground. */
-    --ok: 5 150 105;
-    --ok-soft: 236 253 245;
-    --ok-text: 6 95 70;
+    /* Status. Always paired with a label or symbol, never colour alone. */
+    --ok: 47 107 79;
+    --ok-soft: 230 239 232;
+    --ok-text: 36 84 62;
 
-    --warn: 217 119 6;
-    --warn-soft: 255 251 235;
-    --warn-text: 146 64 14;
+    --warn: 138 90 22;
+    --warn-soft: 247 238 221;
+    --warn-text: 116 74 16;
 
-    --risk: 225 29 72;
-    --risk-soft: 255 241 242;
-    --risk-text: 159 18 57;
+    --risk: 156 52 39;
+    --risk-soft: 247 232 229;
+    --risk-text: 132 43 32;
 
-    --info: 2 132 199;
-    --info-soft: 240 249 255;
-    --info-text: 7 89 133;
+    /* Slate, deliberately not the chart indigo: a status chip must never read
+       as a data series. The palette gate enforces the separation. */
+    --info: 74 90 107;
+    --info-soft: 235 238 241;
+    --info-text: 62 76 91;
 
-    --neutral: 100 116 139;
-    --neutral-soft: 241 245 249;
-    --neutral-text: 51 65 85;
+    --neutral: 95 107 114;
+    --neutral-soft: 239 237 230;
+    --neutral-text: 74 84 90;
 
-    --shadow-card:
-      0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.05);
+    /* Elevation is reserved for things that genuinely float. */
+    --shadow-panel: 0 1px 1px rgb(32 39 43 / 0.03);
     --shadow-raised:
-      0 2px 4px rgb(15 23 42 / 0.05), 0 16px 40px rgb(15 23 42 / 0.09);
+      0 4px 6px rgb(32 39 43 / 0.06), 0 12px 32px rgb(32 39 43 / 0.1);
 
     /**
      * Chart palette. Categorical slots are assigned in fixed order and never
-     * cycled; the ordinal ramp is a single hue for tiered magnitude. Both sets
-     * are validated for colour-vision separation and surface contrast in this
-     * mode and in dark mode — see docs/architecture.md.
+     * cycled. Petrol is deliberately absent: it is the interface accent, and a
+     * mark inside a plot must never be mistaken for it. In-chart emphasis uses
+     * weight, opacity or annotation instead.
      */
-    --chart-1: #2a78d6;
-    --chart-2: #eb6834;
-    --chart-3: #1baf7a;
-    --ordinal-1: #86b6ef;
-    --ordinal-2: #5598e7;
-    --ordinal-3: #2a78d6;
-    --ordinal-4: #1c5cab;
-    --chart-grid: 226 232 240;
+    --chart-1: #33409b;
+    --chart-2: #b24a18;
+    --chart-3: #12705a;
+    --ordinal-1: #8fb4d4;
+    --ordinal-2: #6e9bc8;
+    --ordinal-3: #3c72aa;
+    --ordinal-4: #1f4e7a;
+    --chart-grid: 218 223 217;
+
+    /* Typography */
+    --font-display:
+      "Source Serif 4", ui-serif, Georgia, "Times New Roman", serif;
+    --font-sans:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
   }
 
   .dark {
     color-scheme: dark;
 
-    --canvas: 9 11 17;
-    --surface: 17 20 28;
-    --surface-raised: 23 27 37;
-    --surface-sunken: 13 16 23;
+    --canvas: 20 25 27;
+    --surface: 27 34 37;
+    --surface-raised: 33 41 45;
+    --surface-sunken: 17 22 24;
 
-    --border-subtle: 35 41 54;
-    --border-strong: 51 60 77;
+    --border-subtle: 43 52 55;
+    --border-strong: 61 74 78;
 
-    --text-primary: 241 245 249;
-    --text-secondary: 166 177 194;
-    --text-muted: 129 140 159;
-    --text-inverted: 15 23 42;
+    --text-primary: 233 231 225;
+    --text-secondary: 179 183 181;
+    --text-muted: 148 153 150;
+    --text-inverted: 32 39 43;
 
-    /* Light enough to read as text on a dark surface... */
-    --accent: 129 140 248;
-    --accent-hover: 165 180 252;
-    /* ...but a filled button needs a darker fill to keep white legible. */
-    --accent-solid: 79 70 229;
-    --accent-solid-hover: 91 82 232;
+    --graphite: 27 34 37;
+
+    /* Readable as text on charcoal... */
+    --accent: 111 185 199;
+    --accent-hover: 142 205 217;
+    /* ...but a filled control needs the darker step behind white labels. */
+    --accent-solid: 29 98 112;
+    --accent-solid-hover: 37 119 136;
     --on-accent: 255 255 255;
-    --accent-soft: 30 34 60;
-    --accent-border: 57 62 106;
-    --accent-text: 196 205 253;
+    --accent-soft: 23 50 58;
+    --accent-border: 44 82 92;
+    --accent-text: 160 214 224;
 
-    --ok: 52 211 153;
-    --ok-soft: 10 40 34;
-    --ok-text: 134 239 191;
+    --ok: 111 191 146;
+    --ok-soft: 20 41 31;
+    --ok-text: 150 214 178;
 
-    --warn: 251 191 36;
-    --warn-soft: 46 33 9;
-    --warn-text: 253 219 141;
+    --warn: 224 176 87;
+    --warn-soft: 46 35 18;
+    --warn-text: 233 199 133;
 
-    --risk: 251 113 133;
-    --risk-soft: 51 16 26;
-    --risk-text: 254 182 195;
+    --risk: 233 132 118;
+    --risk-soft: 51 26 23;
+    --risk-text: 240 168 157;
 
-    --info: 56 189 248;
-    --info-soft: 8 37 53;
-    --info-text: 165 226 253;
+    --info: 169 182 194;
+    --info-soft: 30 38 44;
+    --info-text: 184 195 205;
 
-    --neutral: 148 163 184;
-    --neutral-soft: 28 33 44;
-    --neutral-text: 186 196 211;
+    --neutral: 148 153 150;
+    --neutral-soft: 33 41 45;
+    --neutral-text: 179 183 181;
 
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.36);
-    --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.36), 0 16px 40px rgb(0 0 0 / 0.5);
+    --shadow-panel: 0 1px 1px rgb(0 0 0 / 0.24);
+    --shadow-raised: 0 4px 6px rgb(0 0 0 / 0.36), 0 12px 32px rgb(0 0 0 / 0.48);
 
-    /* Dark steps of the same hues, chosen for the dark surface. */
-    --chart-1: #3987e5;
-    --chart-2: #d95926;
-    --chart-3: #199e70;
-    --ordinal-1: #86b6ef;
-    --ordinal-2: #5598e7;
-    --ordinal-3: #2a78d6;
-    --ordinal-4: #1c5cab;
-    --chart-grid: 35 41 54;
+    --chart-1: #6f84e0;
+    --chart-2: #e0793f;
+    --chart-3: #3fae8c;
+    --ordinal-1: #8fb4d4;
+    --ordinal-2: #6e9bc8;
+    --ordinal-3: #3c72aa;
+    --ordinal-4: #24578a;
+    --chart-grid: 43 52 55;
   }
 
   * {
@@ -157,14 +175,7 @@
     min-height: 100vh;
     background-color: rgb(var(--canvas));
     color: rgb(var(--text-primary));
-    font-family:
-      Inter,
-      ui-sans-serif,
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      sans-serif;
+    font-family: var(--font-sans);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -186,16 +197,25 @@
   }
 
   ::selection {
-    background-color: rgb(var(--accent) / 0.22);
+    background-color: rgb(var(--accent) / 0.2);
   }
 }
 
 @layer components {
-  .page-enter {
-    animation: page-enter 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /**
+   * The editorial voice, used sparingly: the landing headline and one closing
+   * statement. Everything analytical stays in the sans stack.
+   */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 
-  /* Skip link: visible only once focused. */
+  .page-enter {
+    animation: page-enter 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
   .skip-link {
     position: absolute;
     left: 0.75rem;
@@ -213,12 +233,28 @@
   .skip-link:focus {
     top: 0.75rem;
   }
+
+  /**
+   * The signal-line motif, scoped deliberately to two places: the brand mark
+   * and the gate diagram. Used in a third and fourth it stops being a
+   * signature and becomes texture.
+   */
+  .signal-rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      rgb(var(--accent)) 0,
+      rgb(var(--accent)) 2rem,
+      rgb(var(--border-subtle)) 2rem,
+      rgb(var(--border-subtle)) 100%
+    );
+  }
 }
 
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -238,7 +274,6 @@
   }
 }
 
-/* Scrollbars that do not fight the dark theme. */
 @supports selector(::-webkit-scrollbar) {
   ::-webkit-scrollbar {
     width: 10px;

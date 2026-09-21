@@ -23,7 +23,9 @@
     "test:e2e:ui": "playwright test --ui",
     "screenshots": "vite-node scripts/capture-screenshots.ts",
     "inspect": "vite-node scripts/inspect-engine.ts",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run palette && npm run test && npm run build",
+    "palette": "vite-node scripts/derive-palette.ts",
+    "proof": "vite-node scripts/proof.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -56,6 +58,7 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
+    "@fontsource/source-serif-4": "^5.3.0",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

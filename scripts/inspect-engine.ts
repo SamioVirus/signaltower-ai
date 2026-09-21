@@ -58,6 +58,8 @@ const comparison = compareStrategies(portfolio);
 console.log(
   `value-ranked final: ${usd(comparison.valueRanked[comparison.valueRanked.length - 1].valueUnlockedUsd)}`,
 );
-console.log(`fifo final:         ${usd(comparison.fifo[comparison.fifo.length - 1].valueUnlockedUsd)}`);
+console.log(
+  `fifo final:         ${usd(comparison.fifo[comparison.fifo.length - 1].valueUnlockedUsd)}`,
+);
 console.log(`weeks sooner:       ${comparison.weeksSooner.toFixed(1)}`);
 console.log(`earlier realisation: ${usd(comparison.earlierRealisationUsd)}`);

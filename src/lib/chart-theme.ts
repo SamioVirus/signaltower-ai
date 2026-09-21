@@ -11,10 +11,14 @@ import { useIsDark } from "@/hooks/useIsDark";
  * as `fill` and `stroke`, so a chart written against tokens renders no marks
  * at all. The tokens still drive everything outside the plot area.
  *
- * Both columns are the same hues stepped for their own surface, and both were
- * validated for colour-vision separation, lightness band and surface contrast.
- * Categorical slots are assigned in fixed order and never cycled, so a series
- * keeps its colour when a filter removes its neighbours.
+ * Both columns are the same hues stepped for their own surface, and both are
+ * re-validated on every run of `npm run palette` for colour-vision separation
+ * and surface contrast. Categorical slots are assigned in fixed order and never
+ * cycled, so a series keeps its colour when a filter removes its neighbours.
+ *
+ * Petrol — the interface accent — is deliberately absent from these series. A
+ * mark inside a plot must never be mistaken for the interaction colour, so
+ * in-chart emphasis uses weight, opacity or an annotation instead of a hue.
  */
 
 export interface ChartPalette {
@@ -30,23 +34,23 @@ export interface ChartPalette {
 }
 
 const LIGHT: ChartPalette = {
-  series: ["#2a78d6", "#eb6834", "#1baf7a"],
-  ordinal: ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab"],
-  grid: "#e2e8f0",
-  axis: "#64748b",
-  surface: "#ffffff",
-  border: "#cbd5e1",
-  text: "#0f172a",
+  series: ["#33409b", "#b24a18", "#12705a"],
+  ordinal: ["#8fb4d4", "#6e9bc8", "#3c72aa", "#1f4e7a"],
+  grid: "#dadfd9",
+  axis: "#5f6b72",
+  surface: "#fffefb",
+  border: "#c3cabf",
+  text: "#20272b",
 };
 
 const DARK: ChartPalette = {
-  series: ["#3987e5", "#d95926", "#199e70"],
-  ordinal: ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab"],
-  grid: "#232936",
-  axis: "#818c9f",
-  surface: "#171b25",
-  border: "#333c4d",
-  text: "#f1f5f9",
+  series: ["#6f84e0", "#e0793f", "#3fae8c"],
+  ordinal: ["#8fb4d4", "#6e9bc8", "#3c72aa", "#24578a"],
+  grid: "#2b3437",
+  axis: "#949996",
+  surface: "#1b2225",
+  border: "#3d4a4e",
+  text: "#e9e7e1",
 };
 
 export const useChartPalette = (): ChartPalette => (useIsDark() ? DARK : LIGHT);

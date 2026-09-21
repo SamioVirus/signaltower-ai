@@ -2,6 +2,8 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
+// Editorial display face, landing headline only — one weight, latin subset.
+import "@fontsource/source-serif-4/latin-600.css";
 import "./styles.css";
 
 import React from "react";

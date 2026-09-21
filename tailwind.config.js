@@ -24,6 +24,7 @@ export default {
         secondary: token("text-secondary"),
         muted: token("text-muted"),
         inverted: token("text-inverted"),
+        graphite: token("graphite"),
         accent: {
           DEFAULT: token("accent"),
           hover: token("accent-hover"),
@@ -33,27 +34,11 @@ export default {
           border: token("accent-border"),
           text: token("accent-text"),
         },
-        ok: {
-          DEFAULT: token("ok"),
-          soft: token("ok-soft"),
-          text: token("ok-text"),
-        },
-        warn: {
-          DEFAULT: token("warn"),
-          soft: token("warn-soft"),
-          text: token("warn-text"),
-        },
-        risk: {
-          DEFAULT: token("risk"),
-          soft: token("risk-soft"),
-          text: token("risk-text"),
-        },
-        info: {
-          DEFAULT: token("info"),
-          soft: token("info-soft"),
-          text: token("info-text"),
-        },
         "on-accent": token("on-accent"),
+        ok: { DEFAULT: token("ok"), soft: token("ok-soft"), text: token("ok-text") },
+        warn: { DEFAULT: token("warn"), soft: token("warn-soft"), text: token("warn-text") },
+        risk: { DEFAULT: token("risk"), soft: token("risk-soft"), text: token("risk-text") },
+        info: { DEFAULT: token("info"), soft: token("info-soft"), text: token("info-text") },
         neutral: {
           DEFAULT: token("neutral"),
           soft: token("neutral-soft"),
@@ -64,10 +49,12 @@ export default {
         DEFAULT: token("border-subtle"),
       },
       boxShadow: {
-        card: "var(--shadow-card)",
+        // Working panels carry a hairline, not a shadow. Only floating things lift.
+        panel: "var(--shadow-panel)",
         raised: "var(--shadow-raised)",
       },
       fontFamily: {
+        display: ["Source Serif 4", "ui-serif", "Georgia", "serif"],
         mono: [
           "ui-monospace",
           "SFMono-Regular",
@@ -78,10 +65,30 @@ export default {
         ],
       },
       fontSize: {
-        "2xs": ["0.6875rem", { lineHeight: "1rem" }],
+        /**
+         * 11px is retired. The old `2xs` now resolves to 12px so any screen
+         * not yet migrated gets the floor for free rather than staying
+         * unreadable until someone remembers it.
+         */
+        "2xs": ["0.75rem", { lineHeight: "1rem" }],
+        label: ["0.8125rem", { lineHeight: "1.125rem" }],
+        /** Editorial display sizes, landing page only. */
+        "display-sm": ["2.25rem", { lineHeight: "1.1", letterSpacing: "-0.015em" }],
+        display: ["3.5rem", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
+        "display-lg": ["4rem", { lineHeight: "1.02", letterSpacing: "-0.022em" }],
+      },
+      borderRadius: {
+        control: "6px",
+        panel: "8px",
+        dialog: "12px",
+      },
+      spacing: {
+        // The scale the layout is built on: 4 8 12 16 24 32 48 64.
+        18: "4.5rem",
       },
       maxWidth: {
         content: "94rem",
+        measure: "68ch",
       },
     },
   },
